@@ -1,170 +1,689 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monster Survivors - Fight Endless Waves of Monsters</title>
-    <meta name="description" content="Survive endless waves of monsters in this action-packed roguelike game. Upgrade your character, collect powerful items, and face increasingly difficult challenges.">
-    <link rel="canonical" href="https://monstersurvivors.com">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        apple: {
-                            blue: '#007AFF',
-                            red: '#FF3B30',
-                            green: '#34C759',
-                            purple: '#AF52DE',
-                            yellow: '#FFCC00',
-                            orange: '#FF9500',
-                            dark: '#1C1C1E',
-                            gray: '#8E8E93',
-                            lightgray: '#F2F2F7'
-                        }
-                    }
-                }
+    <title>玄学运势测试</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2a1b3d;
+            --secondary-color: #44318d;
+            --accent-color: #a4b3b6;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, var(--secondary-color), var(--primary-color));
+            font-family: 'Microsoft YaHei', sans-serif;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-wrapper {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+        }
+
+        button {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .result {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .fortune-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-wrapper {
+                padding: 20px;
             }
         }
-    </script>
-    <style type="text/css">
-        @media (max-width: 640px) {
-            .game-container {
-                height: 70vh;
-            }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
     </style>
 </head>
-<body class="bg-apple-lightgray text-apple-dark">
-    <header class="bg-apple-blue text-white p-4 md:p-6 shadow-md">
-        <div class="container mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="text-center md:text-left mb-4 md:mb-0">
-                    <h1 class="text-3xl md:text-4xl font-bold">Monster Survivors</h1>
-                    <p class="text-lg mt-2">Survive and fight against endless waves of monsters!</p>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <h1><i class="fas fa-moon"></i> 玄学运势测试</h1>
+        <div class="form-wrapper">
+            <form id="fortuneForm">
+                <div class="input-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" required>
                 </div>
-                <nav>
-                    <ul class="flex space-x-4">
-                        <li><a href="#game" class="hover:text-apple-yellow transition-colors">Play Now</a></li>
-                        <li><a href="#about" class="hover:text-apple-yellow transition-colors">About</a></li>
-                        <li><a href="#features" class="hover:text-apple-yellow transition-colors">Features</a></li>
-                        <li><a href="#controls" class="hover:text-apple-yellow transition-colors">Controls</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
-
-    <main class="container mx-auto p-4 md:p-6">
-        <section id="game" class="my-8">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-apple-blue">Play Monster Survivors</h2>
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div class="game-container w-full h-screen max-h-[600px]">
-                    <iframe src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html" 
-                            class="w-full h-full border-0" 
-                            allowfullscreen></iframe>
-                </div>
-            </div>
-        </section>
-
-        <section id="about" class="my-12">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-apple-blue">About Monster Survivors</h2>
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <p class="mb-4">Monster Survivors is an action-packed roguelike survival game where you must fight against endless waves of monsters. Each run is unique, with random enemy spawns, power-ups, and challenges to overcome.</p>
-                <p>Inspired by games like Vampire Survivors, this game combines fast-paced action with strategic character building. How long can you survive as the difficulty continuously increases?</p>
-            </div>
-        </section>
-
-        <section id="features" class="my-12">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-apple-blue">Game Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-apple-orange mb-3">Multiple Characters</h3>
-                    <p>Choose from various characters, each with unique starting weapons and abilities.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-apple-green mb-3">Weapon Evolution</h3>
-                    <p>Combine weapons and passive items to create powerful evolved weapons with special effects.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-apple-purple mb-3">Level Up System</h3>
-                    <p>Gain experience by defeating enemies and level up to choose new weapons or upgrades.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-apple-red mb-3">Boss Battles</h3>
-                    <p>Face off against massive boss monsters that appear at specific time intervals.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-apple-yellow mb-3">Treasure Chests</h3>
-                    <p>Find and open treasure chests to receive random items, gold, or special power-ups.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-xl font-semibold text-apple-blue mb-3">Daily Challenges</h3>
-                    <p>Complete daily challenges to earn rewards and climb the global leaderboard.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="controls" class="my-12">
-            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-apple-blue">Game Controls</h2>
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <h3 class="text-xl font-semibold text-apple-purple mb-3">Keyboard Controls</h3>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li><span class="font-semibold">WASD or Arrow Keys:</span> Move your character</li>
-                            <li><span class="font-semibold">Space:</span> Pause the game</li>
-                            <li><span class="font-semibold">E or Enter:</span> Select/Confirm</li>
-                            <li><span class="font-semibold">Esc:</span> Back/Menu</li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold text-apple-orange mb-3">Mobile Controls</h3>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li><span class="font-semibold">Virtual Joystick:</span> Appears on the left side of the screen for movement</li>
-                            <li><span class="font-semibold">Tap Buttons:</span> Menu and action buttons on the right side</li>
-                            <li><span class="font-semibold">Swipe:</span> Navigate menus and selection screens</li>
-                        </ul>
+                <div class="input-group">
+                    <label>生日</label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <select id="year" required></select>
+                        <select id="month" required></select>
+                        <select id="day" required></select>
                     </div>
                 </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-apple-dark text-white p-6">
-        <div class="container mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p>&copy; 2025 Monster Survivors. All rights reserved.</p>
+                <div class="input-group">
+                    <label>验证</label>
+                    <div id="captcha"></div>
                 </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="hover:text-apple-blue transition-colors">Privacy Policy</a>
-                    <a href="#" class="hover:text-apple-blue transition-colors">Terms of Service</a>
-                    <a href="#" class="hover:text-apple-blue transition-colors">Contact</a>
-                </div>
-            </div>
+                <button type="submit" id="submitBtn">开始测算</button>
+            </form>
         </div>
-    </footer>
+        
+        <div class="loading">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+            <p>正在解析星象能量...</p>
+        </div>
 
-    <!-- JSON-LD structured data for SEO -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "VideoGame",
-        "name": "Monster Survivors",
-        "description": "Survive endless waves of monsters in this action-packed roguelike game. Upgrade your character, collect powerful items, and face increasingly difficult challenges.",
-        "genre": ["Action", "Roguelike", "Survival"],
-        "playMode": "SinglePlayer",
-        "applicationCategory": "Game",
-        "url": "https://monstersurvivors.com",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD",
-            "availability": "https://schema.org/InStock"
+        <div class="result">
+            <div class="fortune-item">
+                <h3>整体运势</h3>
+                <div id="overallFortune"></div>
+            </div>
+            <div class="fortune-item">
+                <h3>爱情运势</h3>
+                <div id="loveFortune"></div>
+            </div>
+            <div class="fortune-item">
+                <h3>事业运势</h3>
+                <div id="careerFortune"></div>
+            </div>
+            <div class="fortune-item">
+                <h3>今日宜忌</h3>
+                <div id="dailyAdvice"></div>
+            </div>
+            <div class="fortune-item">
+                <h3>幸运指数</h3>
+                <div id="luckyNumbers"></div>
+            </div>
+            <button id="shareBtn"><i class="fas fa-share-alt"></i> 分享运势</button>
+            <button id="downloadBtn"><i class="fas fa-download"></i> 下载报告</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // 运势词库
+        const fortunePhrases = {
+            overall: [
+                "星象显示今日能量场极为活跃",
+                "月亮与木星形成吉相，运势上升",
+                "水星逆行期即将结束，事事顺遂",
+                // ... 更多预设语句
+            ],
+            love: [
+                "桃花星动，易遇贵人",
+                "感情上需要多一些耐心",
+                "与伴侣沟通会有新突破",
+                // ... 更多预设语句
+            ],
+            career: [
+                "职场上将遇到新的机遇",
+                "适合开展新项目或签约",
+                "贵人相助，事业蒸蒸日上",
+                // ... 更多预设语句
+            ]
+        };
+
+        // 初始化日期选择器
+        function initDateSelector() {
+            const yearSelect = document.getElementById('year');
+            const monthSelect = document.getElementById('month');
+            const daySelect = document.getElementById('day');
+
+            const currentYear = new Date().getFullYear();
+            for (let year = 1900; year <= currentYear; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year + '年';
+                yearSelect.appendChild(option);
+            }
+
+            for (let month = 1; month <= 12; month++) {
+                const option = document.createElement('option');
+                option.value = month;
+                option.textContent = month + '月';
+                monthSelect.appendChild(option);
+            }
+
+            function updateDays() {
+                const year = parseInt(yearSelect.value);
+                const month = parseInt(monthSelect.value);
+                const days = new Date(year, month, 0).getDate();
+
+                daySelect.innerHTML = '';
+                for (let day = 1; day <= days; day++) {
+                    const option = document.createElement('option');
+                    option.value = day;
+                    option.textContent = day + '日';
+                    daySelect.appendChild(option);
+                }
+            }
+
+            yearSelect.addEventListener('change', updateDays);
+            monthSelect.addEventListener('change', updateDays);
+            updateDays();
         }
-    }
+
+        // 生成验证码
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 10);
+            const num2 = Math.floor(Math.random() * 10);
+            const captchaDiv = document.getElementById('captcha');
+            captchaDiv.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>${num1} + ${num2} = ?</span>
+                    <input type="number" id="captchaInput" required>
+                </div>
+            `;
+            return num1 + num2;
+        }
+
+        // 计算星座
+        function calculateZodiac(month, day) {
+            const zodiacDates = [
+                {sign: "摩羯座", startMonth: 12, startDay: 22},
+                {sign: "水瓶座", startMonth: 1, startDay: 20},
+                {sign: "双鱼座", startMonth: 2, startDay: 19},
+                // ... 其他星座
+            ];
+            // 实现星座计算逻辑
+            return "水瓶座"; // 示例返回
+        }
+
+        // 生成运势
+        function generateFortune(name, birthDate) {
+            const fortune = {
+                overall: fortunePhrases.overall[Math.floor(Math.random() * fortunePhrases.overall.length)],
+                love: fortunePhrases.love[Math.floor(Math.random() * fortunePhrases.love.length)],
+                career: fortunePhrases.career[Math.floor(Math.random() * fortunePhrases.career.length)],
+                luckyColor: ["红色", "蓝色", "绿色", "紫色"][Math.floor(Math.random() * 4)],
+                luckyNumber: Math.floor(Math.random() * 100)
+            };
+            return fortune;
+        }
+
+        // 初始化粒子效果
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#ffffff"
+                },
+                shape: {
+                    type: "circle"
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: "none",
+                    random: false,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            }
+        });
+
+        // 主程序
+        document.addEventListener('DOMContentLoaded', () => {
+            initDateSelector();
+            let captchaAnswer = generateCaptcha();
+
+            document.getElementById('fortuneForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const captchaInput = document.getElementById('captchaInput').value;
+                if (parseInt(captchaInput) !== captchaAnswer) {
+                    alert('验证码错误，请重试！');
+                    captchaAnswer = generateCaptcha();
+                    return;
+                }
+
+                const submitBtn = document.getElementById('submitBtn');
+                const loading = document.querySelector('.loading');
+                const result = document.querySelector('.result');
+
+                submitBtn.disabled = true;
+                loading.style.display = 'block';
+                result.style.display = 'none';
+
+                // 模拟异步计算
+                setTimeout(() => {
+                    const name = document.getElementById('name').value;
+                    const year = document.getElementById('year').value;
+                    const month = document.getElementById('month').value;
+                    const day = document.getElementById('day').value;
+
+                    const fortune = generateFortune(name, new Date(year, month - 1, day));
+
+                    document.getElementById('overallFortune').textContent = fortune.overall;
+                    document.getElementById('loveFortune').textContent = fortune.love;
+                    document.getElementById('careerFortune').textContent = fortune.career;
+                    document.getElementById('luckyNumbers').innerHTML = `
+                        幸运色：${fortune.luckyColor}<br>
+                        幸运数字：${fortune.luckyNumber}
+                    `;
+
+                    loading.style.display = 'none';
+                    result.style.display = 'block';
+                    submitBtn.disabled = false;
+
+                    // 保存到本地存储
+                    const history = JSON.parse(localStorage.getItem('fortuneHistory') || '[]');
+                    history.push({
+                        name,
+                        date: new Date().toISOString(),
+                        fortune
+                    });
+                    localStorage.setItem('fortuneHistory', JSON.stringify(history));
+                }, 2000);
+            });
+
+            // 分享功能
+            document.getElementById('shareBtn').addEventListener('click', () => {
+                if (navigator.share) {
+                    navigator.share({
+                        title: '我的今日运势',
+                        text: document.getElementById('overallFortune').textContent,
+                        url: window.location.href
+                    });
+                } else {
+                    alert('复制链接分享给好友吧！');
+                }
+            });
+        });
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>东西方玄学运势预测 - 紫微斗数 × 星座解析</title>
+    <style>
+        :root {
+            --primary-color: #1d1d1f;
+            --secondary-color: #86868b;
+            --accent-color: #6e4aff;
+            --background-light: #f5f5f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--primary-color);
+        }
+
+        /* 现代化导航栏 */
+        .header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem;
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hero区域 */
+        .hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 特性区域 */
+        .features {
+            padding: 80px 20px;
+            background: #fff;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 修复下拉菜单样式 */
+        select {
+            appearance: none;
+            background: #fff;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            padding: 0.5rem;
+            width: 100%;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        /* 自适应布局 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background: var(--background-light);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .copyright {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">玄学运势</div>
+            <div class="nav-links">
+                <a href="#features">特色</a>
+                <a href="#how-it-works">工作原理</a>
+                <a href="#pricing">服务价格</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>探索命运的奥秘</h1>
+        <p>融合东方紫微斗数与西方星座学，为您揭示人生轨迹</p>
+    </section>
+
+    <section class="features" id="features">
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>紫微斗数</h3>
+                <p>源自古老东方智慧，精准解读人生命盘</p>
+            </div>
+            <div class="feature-item">
+                <h3>星座解析</h3>
+                <p>结合西方占星学，全方位剖析性格特质</p>
+            </div>
+            <div class="feature-item">
+                <h3>易经预测</h3>
+                <p>运用周易卦象，预知未来吉凶</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="copyright">
+            <p>© 2024 玄学运势 版权所有</p>
+            <p>开发者：周峰 | 联系方式：mxdloveqqq@gmail.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // 优化下拉菜单交互
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('mouseover', function(e) {
+                const rect = this.getBoundingClientRect();
+                const mouseY = e.clientY - rect.top;
+                const optionHeight = rect.height / this.options.length;
+                const index = Math.floor(mouseY / optionHeight);
+                
+                if(index >= 0 && index < this.options.length) {
+                    this.selectedIndex = index;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+<style>
+    /* 设置下拉菜单中数字的颜色 */
+    select option {
+        color: black;
+    }
+
+    /* 设置网站背景色为紫色 */
+    body {
+        background-color: #f3e5f5; /* 使用浅紫色作为背景色 */
+    }
+
+    /* 确保内容区域清晰可读 */
+    .hero, .features, .footer {
+        background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+        margin: 20px 0;
+        padding: 20px;
+        border-radius: 8px;
+    }
+</style>
+<style>
+    /* 设置生日输入框中的文字颜色为黑色 */
+    input[type="number"] {
+        color: black;
+    }
+
+    /* 创建紫色星空背景效果 */
+    body {
+        background: linear-gradient(to bottom, #2c1445, #4a1d6e);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 添加星星效果 */
+    body:before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
+            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 3px),
+            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 4px);
+        background-size: 550px 550px, 350px 350px, 250px 250px;
+        background-position: 0 0, 40px 60px, 130px 270px;
+        z-index: -1;
+        animation: twinkle 15s linear infinite;
+    }
+
+    @keyframes twinkle {
+        from {
+            transform: translateY(0);
+        }
+        to {
+            transform: translateY(-550px);
+        }
+    }
+</style>
+<style>
+    /* 设置生日输入框的背景颜色 */
+    input[type="date"] {
+        background-color: rgba(253, 253, 253, 0.9);
+    }
+</style>
+<style>
+    /* 设置数字输入框的样式 */
+    .birth-input {
+        width: 50px;
+        padding: 5px;
+        margin: 0 5px;
+        background-color: rgba(253, 253, 253, 0.9);
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .birth-input:invalid {
+        border-color: red;
+    }
+
+    .birth-group {
+        margin: 10px 0;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        display: none;
+        margin-top: 5px;
+    }
+</style>
+
+<script>
+    function validateBirthDate() {
+        const year = parseInt(document.getElementById('birth-year').value);
+        const month = parseInt(document.getElementById('birth-month').value);
+        const day = parseInt(document.getElementById('birth-day').value);
+        const errorMsg = document.getElementById('birth-error');
+
+        // 获取当前年份
+        const currentYear = new Date().getFullYear();
+
+        // 验证年份
+        if (year < 1900 || year > currentYear) {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = '请输入有效的年份(1900-' + currentYear + ')';
+            return false;
+        }
+
+        // 验证月份
+        if (month < 1 || month > 12) {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = '请输入有效的月份(1-12)';
+            return false;
+        }
+
+        // 获取每月天数
+        const daysInMonth = new Date(year, month, 0).getDate();
+
+        // 验证日期
+        if (day < 1 || day > daysInMonth) {
+            errorMsg.style.display = 'block';
+            errorMsg.textContent = '请输入有效的日期(1-' + daysInMonth + ')';
+            return false;
+        }
+
+        errorMsg.style.display = 'none';
+        return true;
+    }
+</script>
+
+<div class="birth-group">
+    <input type="number" id="birth-year" class="birth-input" placeholder="年" min="1900" max="2099" required onchange="validateBirthDate()">年
+    <input type="number" id="birth-month" class="birth-input" placeholder="月" min="1" max="12" required onchange="validateBirthDate()">月
+    <input type="number" id="birth-day" class="birth-input" placeholder="日" min="1" max="31" required onchange="validateBirthDate()">日
+    <div id="birth-error" class="error-message"></div>
+</div>

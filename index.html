@@ -315,7 +315,7 @@
                         </li>
                         <li class="flex items-start">
                             <i class="fa fa-map-marker text-accent mt-1 mr-2"></i>
-                            <span class="text-light/70">广东省深圳市龙华区龙军花园220A</span>
+                            <span class="text-light/70">北京市朝阳区神秘大厦1001室</span>
                         </li>
                     </ul>
                 </div>
@@ -364,47 +364,101 @@
             });
         });
 
-        // 塔罗牌数据（简化版）
+        // 塔罗牌数据 (简化为关键词，用于AI Prompt)
+        // 警告：在前端代码中直接暴露API密钥（如 deepSeekApiKey）存在严重安全风险。
+        // 在生产环境中，强烈建议将API调用移至后端服务器进行。
+        const deepSeekApiKey = 'sk-6694935de0f947d3b78e5b0543505eca';
+
         const tarotCards = [
             {
                 name: "愚者",
                 image: "https://picsum.photos/seed/fool/200/300",
-                meaning: "愚者代表新的开始、自由、天真和无限的可能性。这张牌提醒你要勇于冒险，相信自己的直觉，不要被恐惧所束缚。在正位时，它预示着新的机会即将出现，你需要以开放的心态去迎接它们。"
+                keywords: "新的开始, 自由, 天真, 无限可能, 冒险"
             },
             {
                 name: "魔术师",
                 image: "https://picsum.photos/seed/magician/200/300",
-                meaning: "魔术师象征着创造力、资源、行动和意志力。你拥有实现目标所需的一切能力，现在是将想法付诸行动的时候了。正位的魔术师提醒你要相信自己的能力，善于利用周围的资源，发挥出最大的潜力。"
+                keywords: "创造力, 资源, 行动, 意志力, 显化"
             },
             {
                 name: "女祭司",
                 image: "https://picsum.photos/seed/priestess/200/300",
-                meaning: "女祭司代表直觉、潜意识、智慧和神秘知识。你内在的直觉和洞察力正在增强，需要倾听内心的声音。正位的女祭司提醒你要相信自己的直觉，探索内心世界，可能会有隐藏的真相被揭示。"
+                keywords: "直觉, 潜意识, 智慧, 神秘, 静默"
             },
             {
                 name: "皇后",
                 image: "https://picsum.photos/seed/empress/200/300",
-                meaning: "皇后象征着丰饶、创造力、滋养和女性力量。这是一个充满活力和创造力的时期，你可能会感受到生活的富足和满足。正位的皇后鼓励你发挥自己的创造力，关爱自己和他人，享受生活带来的美好。"
+                keywords: "丰饶, 创造力, 滋养, 女性力量, 美"
             },
             {
                 name: "皇帝",
                 image: "https://picsum.photos/seed/emperor/200/300",
-                meaning: "皇帝代表权威、领导力、结构和秩序。你需要建立清晰的目标和计划，并采取果断的行动来实现它们。正位的皇帝提醒你要发挥自己的领导力，建立稳定的基础，为未来的发展做好准备。"
+                keywords: "权威, 领导力, 结构, 秩序, 责任"
             },
             {
                 name: "恋人",
                 image: "https://picsum.photos/seed/lovers/200/300",
-                meaning: "恋人象征着选择、关系、平衡和和谐。这张牌通常与重要的决定或关系有关，你需要在两者之间做出选择。正位的恋人提醒你要倾听自己内心的声音，考虑各方利益，做出明智的决定。"
+                keywords: "选择, 关系, 平衡, 和谐, 价值观"
             }
         ];
 
+        async function getAIReading(question, cardName, cardKeywords) {
+            const prompt = `你是一位专业的塔罗牌解读师。你的任务是结合用户的问题和抽到的塔罗牌，提供一段针对该问题的、富有同理心和启发性的塔罗牌解读。
+
+请遵循以下步骤：
+1.  首先，识别用户问题的核心领域（例如：爱情、事业、学业、人际关系、个人成长、财运等）。
+2.  然后，将抽到的塔罗牌（"${cardName}"，核心关键词："${cardKeywords}"）的象征意义与用户问题的具体情境联系起来。
+3.  最后，生成一段大约150-200字的解读。解读需要包含对现状的分析、未来的可能性以及给用户的具体建议。语言风格应温暖、积极并富有启发性。
+
+现在，请解读以下问题：
+用户问题："${question}"`;
+
+            try {
+                const response = await fetch('https://api.deepseek.com/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${deepSeekApiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'deepseek-chat',
+                        messages: [
+                            { role: 'system', content: '你是一位专业的塔罗牌解读师，将根据用户问题和牌意提供个性化解读。' },
+                            { role: 'user', content: prompt }
+                        ],
+                        max_tokens: 500,
+                        temperature: 0.7,
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    throw new Error(`API请求失败，状态码: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.choices[0].message.content;
+            } catch (error) {
+                console.error('获取AI解读时出错:', error);
+                return '抱歉，解读时遇到了问题。请检查网络连接或API密钥是否正确，然后重试。';
+            }
+        }
+
         // 抽取塔罗牌功能
-        document.getElementById('draw-button').addEventListener('click', function() {
-            const question = document.getElementById('question').value;
+        document.getElementById('draw-button').addEventListener('click', async function() {
+            const questionInput = document.getElementById('question');
+            const drawButton = this;
+            const question = questionInput.value;
+
             if (!question.trim()) {
                 alert('请先输入你的问题');
                 return;
             }
+
+            // 禁用按钮并显示加载状态
+            drawButton.disabled = true;
+            drawButton.innerHTML = '正在解读中... <i class="fa fa-spinner fa-spin ml-2"></i>';
             
             // 随机选择一张牌
             const randomIndex = Math.floor(Math.random() * tarotCards.length);
@@ -417,20 +471,24 @@
             const cardMeaning = document.getElementById('card-meaning');
             const readingResult = document.getElementById('reading-result');
             
-            // 设置牌面图片
             drawnCard.src = selectedCard.image;
             drawnCard.alt = selectedCard.name;
             
-            // 显示结果区域
             readingResult.classList.remove('hidden');
-            
-            // 设置牌名和解读
             cardName.textContent = selectedCard.name;
-            cardMeaning.textContent = selectedCard.meaning;
+            cardMeaning.innerHTML = '<i class="fa fa-spinner fa-spin"></i> 正在获取AI解读，请稍候...';
             
             // 添加翻转动画
             tarotCard.classList.add('card-flipped');
             tarotCard.querySelector('.card-back').classList.remove('hidden');
+
+            // 获取并显示AI解读
+            const aiMeaning = await getAIReading(question, selectedCard.name, selectedCard.keywords);
+            cardMeaning.textContent = aiMeaning;
+
+            // 恢复按钮
+            drawButton.disabled = false;
+            drawButton.innerHTML = '抽取塔罗牌 <i class="fa fa-random ml-2"></i>';
         });
     </script>
 </body>

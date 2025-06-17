@@ -1,691 +1,437 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2175933417671511"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>玄学运势测试</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #2a1b3d;
-            --secondary-color: #44318d;
-            --accent-color: #a4b3b6;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: radial-gradient(circle at center, var(--secondary-color), var(--primary-color));
-            font-family: 'Microsoft YaHei', sans-serif;
-            color: #fff;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .form-wrapper {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 50px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            font-size: 16px;
-        }
-
-        button {
-            background: var(--accent-color);
-            color: var(--primary-color);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .result {
-            display: none;
-            margin-top: 30px;
-        }
-
-        .fortune-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .form-wrapper {
-                padding: 20px;
+    <title>神秘塔罗 | 探索命运的奥秘</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5B21B6', // 深紫色主色调
+                        secondary: '#8B5CF6', // 紫色辅助色
+                        accent: '#EC4899', // 亮粉色强调色
+                        dark: '#1F2937', // 深色背景
+                        light: '#F3F4F6', // 浅色文本
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Merriweather', 'Georgia', 'serif'],
+                    },
+                }
             }
         }
-
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-flip {
+                perspective: 1000px;
+                transform-style: preserve-3d;
+            }
+            .card-front, .card-back {
+                backface-visibility: hidden;
+                transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .card-back {
+                transform: rotateY(180deg);
+            }
+            .card-flipped .card-front {
+                transform: rotateY(180deg);
+            }
+            .card-flipped .card-back {
+                transform: rotateY(0deg);
+            }
         }
     </style>
 </head>
-<body>
-    <div id="particles-js"></div>
-    <div class="container">
-        <h1><i class="fas fa-moon"></i> 玄学运势测试</h1>
-        <div class="form-wrapper">
-            <form id="fortuneForm">
-                <div class="input-group">
-                    <label for="name">姓名</label>
-                    <input type="text" id="name" required>
+<body class="bg-gradient-to-br from-dark to-primary text-light min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="fixed w-full bg-dark/80 backdrop-blur-md z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <i class="fa fa-star-o text-accent text-2xl"></i>
+                <span class="text-xl font-bold">神秘塔罗</span>
+            </a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="hover:text-accent transition-colors">首页</a>
+                <a href="#readings" class="hover:text-accent transition-colors">占卜方式</a>
+                <a href="#tarot-deck" class="hover:text-accent transition-colors">塔罗牌库</a>
+                <a href="#about" class="hover:text-accent transition-colors">关于我们</a>
+            </div>
+            <button class="md:hidden text-xl" id="menu-toggle">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+        <!-- 移动端菜单 -->
+        <div class="md:hidden hidden bg-dark/95 backdrop-blur-lg" id="mobile-menu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                <a href="#home" class="hover:text-accent transition-colors py-2">首页</a>
+                <a href="#readings" class="hover:text-accent transition-colors py-2">占卜方式</a>
+                <a href="#tarot-deck" class="hover:text-accent transition-colors py-2">塔罗牌库</a>
+                <a href="#about" class="hover:text-accent transition-colors py-2">关于我们</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <!-- 英雄区域 -->
+        <section id="home" class="min-h-[80vh] flex flex-col justify-center items-center text-center">
+            <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-secondary to-accent">
+                探索命运的奥秘
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] max-w-2xl mb-10 text-light/80">
+                通过古老的塔罗牌智慧，揭示你内心的困惑与未来的可能性。每一张牌都承载着宇宙的信息，等待为你指引方向。
+            </p>
+            <button class="bg-accent hover:bg-accent/80 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                开始占卜 <i class="fa fa-arrow-right ml-2"></i>
+            </button>
+            <div class="mt-16 flex flex-wrap justify-center gap-8">
+                <div class="bg-dark/50 backdrop-blur-sm p-6 rounded-xl border border-secondary/30 max-w-xs transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                    <i class="fa fa-magic text-3xl text-accent mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">精准解读</h3>
+                    <p class="text-light/70">基于古老传统与现代心理学的深度解读</p>
                 </div>
-                <div class="input-group">
-                    <label>生日</label>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        <select id="year" required></select>
-                        <select id="month" required></select>
-                        <select id="day" required></select>
+                <div class="bg-dark/50 backdrop-blur-sm p-6 rounded-xl border border-secondary/30 max-w-xs transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                    <i class="fa fa-book text-3xl text-accent mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">丰富牌库</h3>
+                    <p class="text-light/70">包含78张完整塔罗牌及其详细含义</p>
+                </div>
+                <div class="bg-dark/50 backdrop-blur-sm p-6 rounded-xl border border-secondary/30 max-w-xs transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                    <i class="fa fa-history text-3xl text-accent mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">历史记录</h3>
+                    <p class="text-light/70">保存你的占卜历史，随时回顾洞察</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 占卜方式 -->
+        <section id="readings" class="py-20">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-12 text-center">占卜方式</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-secondary/30 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/seed/single/600/400" alt="单张塔罗牌" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">单张塔罗</h3>
+                        <p class="text-light/70 mb-4">抽取一张牌，获取当下最直接的指引与洞察。适合快速解答简单问题。</p>
+                        <button class="w-full bg-secondary hover:bg-secondary/80 text-white py-2 rounded-lg transition-colors">
+                            开始占卜
+                        </button>
                     </div>
                 </div>
-                <div class="input-group">
-                    <label>验证</label>
-                    <div id="captcha"></div>
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-secondary/30 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/seed/three/600/400" alt="三张塔罗牌" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">三张塔罗</h3>
+                        <p class="text-light/70 mb-4">过去、现在、未来的三张牌阵，提供全面的情况分析与发展趋势。</p>
+                        <button class="w-full bg-secondary hover:bg-secondary/80 text-white py-2 rounded-lg transition-colors">
+                            开始占卜
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" id="submitBtn">开始测算</button>
-            </form>
-        </div>
-        
-        <div class="loading">
-            <i class="fas fa-spinner fa-spin fa-3x"></i>
-            <p>正在解析星象能量...</p>
-        </div>
-
-        <div class="result">
-            <div class="fortune-item">
-                <h3>整体运势</h3>
-                <div id="overallFortune"></div>
-            </div>
-            <div class="fortune-item">
-                <h3>爱情运势</h3>
-                <div id="loveFortune"></div>
-            </div>
-            <div class="fortune-item">
-                <h3>事业运势</h3>
-                <div id="careerFortune"></div>
-            </div>
-            <div class="fortune-item">
-                <h3>今日宜忌</h3>
-                <div id="dailyAdvice"></div>
-            </div>
-            <div class="fortune-item">
-                <h3>幸运指数</h3>
-                <div id="luckyNumbers"></div>
-            </div>
-            <button id="shareBtn"><i class="fas fa-share-alt"></i> 分享运势</button>
-            <button id="downloadBtn"><i class="fas fa-download"></i> 下载报告</button>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        // 运势词库
-        const fortunePhrases = {
-            overall: [
-                "星象显示今日能量场极为活跃",
-                "月亮与木星形成吉相，运势上升",
-                "水星逆行期即将结束，事事顺遂",
-                // ... 更多预设语句
-            ],
-            love: [
-                "桃花星动，易遇贵人",
-                "感情上需要多一些耐心",
-                "与伴侣沟通会有新突破",
-                // ... 更多预设语句
-            ],
-            career: [
-                "职场上将遇到新的机遇",
-                "适合开展新项目或签约",
-                "贵人相助，事业蒸蒸日上",
-                // ... 更多预设语句
-            ]
-        };
-
-        // 初始化日期选择器
-        function initDateSelector() {
-            const yearSelect = document.getElementById('year');
-            const monthSelect = document.getElementById('month');
-            const daySelect = document.getElementById('day');
-
-            const currentYear = new Date().getFullYear();
-            for (let year = 1900; year <= currentYear; year++) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year + '年';
-                yearSelect.appendChild(option);
-            }
-
-            for (let month = 1; month <= 12; month++) {
-                const option = document.createElement('option');
-                option.value = month;
-                option.textContent = month + '月';
-                monthSelect.appendChild(option);
-            }
-
-            function updateDays() {
-                const year = parseInt(yearSelect.value);
-                const month = parseInt(monthSelect.value);
-                const days = new Date(year, month, 0).getDate();
-
-                daySelect.innerHTML = '';
-                for (let day = 1; day <= days; day++) {
-                    const option = document.createElement('option');
-                    option.value = day;
-                    option.textContent = day + '日';
-                    daySelect.appendChild(option);
-                }
-            }
-
-            yearSelect.addEventListener('change', updateDays);
-            monthSelect.addEventListener('change', updateDays);
-            updateDays();
-        }
-
-        // 生成验证码
-        function generateCaptcha() {
-            const num1 = Math.floor(Math.random() * 10);
-            const num2 = Math.floor(Math.random() * 10);
-            const captchaDiv = document.getElementById('captcha');
-            captchaDiv.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span>${num1} + ${num2} = ?</span>
-                    <input type="number" id="captchaInput" required>
+                <div class="bg-dark/50 backdrop-blur-sm rounded-xl overflow-hidden border border-secondary/30 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://picsum.photos/seed/celtic/600/400" alt="凯尔特十字塔罗牌阵" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">凯尔特十字</h3>
+                        <p class="text-light/70 mb-4">最经典的塔罗牌阵，深入解读你生活各方面的状况与潜在影响。</p>
+                        <button class="w-full bg-secondary hover:bg-secondary/80 text-white py-2 rounded-lg transition-colors">
+                            开始占卜
+                        </button>
+                    </div>
                 </div>
-            `;
-            return num1 + num2;
-        }
+            </div>
+        </section>
 
-        // 计算星座
-        function calculateZodiac(month, day) {
-            const zodiacDates = [
-                {sign: "摩羯座", startMonth: 12, startDay: 22},
-                {sign: "水瓶座", startMonth: 1, startDay: 20},
-                {sign: "双鱼座", startMonth: 2, startDay: 19},
-                // ... 其他星座
-            ];
-            // 实现星座计算逻辑
-            return "水瓶座"; // 示例返回
-        }
+        <!-- 牌库展示 (简化版) -->
+        <section id="tarot-deck" class="py-20">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-12 text-center">塔罗牌库</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- 这里会动态加载牌面，先展示几张示例 -->
+                <div class="card-flip cursor-pointer" onclick="this.classList.toggle('card-flipped')">
+                    <div class="card-front bg-dark/40 rounded-lg p-2 border border-secondary/20 flex items-center justify-center h-48">
+                        <img src="https://picsum.photos/seed/major1/200/300" alt="塔罗牌示例" class="max-h-full">
+                    </div>
+                    <div class="card-back absolute inset-0 bg-dark/80 rounded-lg p-4 border border-accent/30 flex flex-col items-center justify-center text-center">
+                        <h4 class="font-semibold text-accent mb-2">愚者</h4>
+                        <p class="text-xs text-light/70">新的开始、自由、天真、无限可能</p>
+                    </div>
+                </div>
+                <div class="card-flip cursor-pointer" onclick="this.classList.toggle('card-flipped')">
+                    <div class="card-front bg-dark/40 rounded-lg p-2 border border-secondary/20 flex items-center justify-center h-48">
+                        <img src="https://picsum.photos/seed/major2/200/300" alt="塔罗牌示例" class="max-h-full">
+                    </div>
+                    <div class="card-back absolute inset-0 bg-dark/80 rounded-lg p-4 border border-accent/30 flex flex-col items-center justify-center text-center">
+                        <h4 class="font-semibold text-accent mb-2">魔术师</h4>
+                        <p class="text-xs text-light/70">创造力、资源、行动、意志力</p>
+                    </div>
+                </div>
+                <div class="card-flip cursor-pointer" onclick="this.classList.toggle('card-flipped')">
+                    <div class="card-front bg-dark/40 rounded-lg p-2 border border-secondary/20 flex items-center justify-center h-48">
+                        <img src="https://picsum.photos/seed/major3/200/300" alt="塔罗牌示例" class="max-h-full">
+                    </div>
+                    <div class="card-back absolute inset-0 bg-dark/80 rounded-lg p-4 border border-accent/30 flex flex-col items-center justify-center text-center">
+                        <h4 class="font-semibold text-accent mb-2">女祭司</h4>
+                        <p class="text-xs text-light/70">直觉、潜意识、智慧、神秘知识</p>
+                    </div>
+                </div>
+                <div class="card-flip cursor-pointer" onclick="this.classList.toggle('card-flipped')">
+                    <div class="card-front bg-dark/40 rounded-lg p-2 border border-secondary/20 flex items-center justify-center h-48">
+                        <img src="https://picsum.photos/seed/major4/200/300" alt="塔罗牌示例" class="max-h-full">
+                    </div>
+                    <div class="card-back absolute inset-0 bg-dark/80 rounded-lg p-4 border border-accent/30 flex flex-col items-center justify-center text-center">
+                        <h4 class="font-semibold text-accent mb-2">皇后</h4>
+                        <p class="text-xs text-light/70">丰饶、创造力、滋养、女性力量</p>
+                    </div>
+                </div>
+                <div class="card-flip cursor-pointer" onclick="this.classList.toggle('card-flipped')">
+                    <div class="card-front bg-dark/40 rounded-lg p-2 border border-secondary/20 flex items-center justify-center h-48">
+                        <img src="https://picsum.photos/seed/major5/200/300" alt="塔罗牌示例" class="max-h-full">
+                    </div>
+                    <div class="card-back absolute inset-0 bg-dark/80 rounded-lg p-4 border border-accent/30 flex flex-col items-center justify-center text-center">
+                        <h4 class="font-semibold text-accent mb-2">皇帝</h4>
+                        <p class="text-xs text-light/70">权威、领导力、结构、秩序</p>
+                    </div>
+                </div>
+                <div class="card-flip cursor-pointer" onclick="this.classList.toggle('card-flipped')">
+                    <div class="card-front bg-dark/40 rounded-lg p-2 border border-secondary/20 flex items-center justify-center h-48">
+                        <img src="https://picsum.photos/seed/major6/200/300" alt="塔罗牌示例" class="max-h-full">
+                    </div>
+                    <div class="card-back absolute inset-0 bg-dark/80 rounded-lg p-4 border border-accent/30 flex flex-col items-center justify-center text-center">
+                        <h4 class="font-semibold text-accent mb-2">恋人</h4>
+                        <p class="text-xs text-light/70">选择、关系、平衡、和谐</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <button class="bg-secondary hover:bg-secondary/80 text-white px-6 py-3 rounded-lg transition-colors">
+                    查看完整牌库
+                </button>
+            </div>
+        </section>
 
-        // 生成运势
-        function generateFortune(name, birthDate) {
-            const fortune = {
-                overall: fortunePhrases.overall[Math.floor(Math.random() * fortunePhrases.overall.length)],
-                love: fortunePhrases.love[Math.floor(Math.random() * fortunePhrases.love.length)],
-                career: fortunePhrases.career[Math.floor(Math.random() * fortunePhrases.career.length)],
-                luckyColor: ["红色", "蓝色", "绿色", "紫色"][Math.floor(Math.random() * 4)],
-                luckyNumber: Math.floor(Math.random() * 100)
-            };
-            return fortune;
-        }
-
-        // 初始化粒子效果
-        particlesJS('particles-js', {
-            particles: {
-                number: {
-                    value: 80,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: "#ffffff"
-                },
-                shape: {
-                    type: "circle"
-                },
-                opacity: {
-                    value: 0.5,
-                    random: false
-                },
-                size: {
-                    value: 3,
-                    random: true
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#ffffff",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 6,
-                    direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false
-                }
-            }
-        });
-
-        // 主程序
-        document.addEventListener('DOMContentLoaded', () => {
-            initDateSelector();
-            let captchaAnswer = generateCaptcha();
-
-            document.getElementById('fortuneForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const captchaInput = document.getElementById('captchaInput').value;
-                if (parseInt(captchaInput) !== captchaAnswer) {
-                    alert('验证码错误，请重试！');
-                    captchaAnswer = generateCaptcha();
-                    return;
-                }
-
-                const submitBtn = document.getElementById('submitBtn');
-                const loading = document.querySelector('.loading');
-                const result = document.querySelector('.result');
-
-                submitBtn.disabled = true;
-                loading.style.display = 'block';
-                result.style.display = 'none';
-
-                // 模拟异步计算
-                setTimeout(() => {
-                    const name = document.getElementById('name').value;
-                    const year = document.getElementById('year').value;
-                    const month = document.getElementById('month').value;
-                    const day = document.getElementById('day').value;
-
-                    const fortune = generateFortune(name, new Date(year, month - 1, day));
-
-                    document.getElementById('overallFortune').textContent = fortune.overall;
-                    document.getElementById('loveFortune').textContent = fortune.love;
-                    document.getElementById('careerFortune').textContent = fortune.career;
-                    document.getElementById('luckyNumbers').innerHTML = `
-                        幸运色：${fortune.luckyColor}<br>
-                        幸运数字：${fortune.luckyNumber}
-                    `;
-
-                    loading.style.display = 'none';
-                    result.style.display = 'block';
-                    submitBtn.disabled = false;
-
-                    // 保存到本地存储
-                    const history = JSON.parse(localStorage.getItem('fortuneHistory') || '[]');
-                    history.push({
-                        name,
-                        date: new Date().toISOString(),
-                        fortune
-                    });
-                    localStorage.setItem('fortuneHistory', JSON.stringify(history));
-                }, 2000);
-            });
-
-            // 分享功能
-            document.getElementById('shareBtn').addEventListener('click', () => {
-                if (navigator.share) {
-                    navigator.share({
-                        title: '我的今日运势',
-                        text: document.getElementById('overallFortune').textContent,
-                        url: window.location.href
-                    });
-                } else {
-                    alert('复制链接分享给好友吧！');
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>东西方玄学运势预测 - 紫微斗数 × 星座解析</title>
-    <style>
-        :root {
-            --primary-color: #1d1d1f;
-            --secondary-color: #86868b;
-            --accent-color: #6e4aff;
-            --background-light: #f5f5f7;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-        }
-
-        body {
-            line-height: 1.6;
-            color: var(--primary-color);
-        }
-
-        /* 现代化导航栏 */
-        .header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            position: fixed;
-            width: 100%;
-            z-index: 100;
-            padding: 1rem;
-        }
-
-        .nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Hero区域 */
-        .hero {
-            padding: 120px 20px 60px;
-            text-align: center;
-            background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* 特性区域 */
-        .features {
-            padding: 80px 20px;
-            background: #fff;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* 修复下拉菜单样式 */
-        select {
-            appearance: none;
-            background: #fff;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
-            padding: 0.5rem;
-            width: 100%;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        /* 自适应布局 */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
+        <!-- 占卜功能区 (简化版) -->
+        <section class="py-20">
+            <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-6 text-center">开始占卜</h2>
+            <p class="text-center text-light/70 max-w-2xl mx-auto mb-12">
+                集中精神，心中默念你的问题，然后点击牌面抽取塔罗牌，获取指引。
+            </p>
             
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* 页脚样式 */
-        .footer {
-            background: var(--background-light);
-            padding: 40px 20px;
-            text-align: center;
-        }
-
-        .copyright {
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">玄学运势</div>
-            <div class="nav-links">
-                <a href="#features">特色</a>
-                <a href="#how-it-works">工作原理</a>
-                <a href="#pricing">服务价格</a>
+            <div class="bg-dark/50 backdrop-blur-sm rounded-xl p-8 max-w-4xl mx-auto border border-secondary/30">
+                <div class="mb-8">
+                    <label for="question" class="block text-lg font-medium mb-2">你的问题</label>
+                    <textarea id="question" rows="3" class="w-full bg-dark/70 border border-secondary/30 rounded-lg p-3 text-light focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all" placeholder="请输入你想询问的问题..."></textarea>
+                </div>
+                
+                <div class="flex justify-center mb-8">
+                    <div class="relative card-flip w-40 h-60 cursor-pointer" id="tarot-card">
+                        <div class="card-front absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center border-2 border-accent/50 shadow-lg">
+                            <i class="fa fa-question-circle text-5xl text-accent/80"></i>
+                        </div>
+                        <div class="card-back absolute inset-0 bg-white rounded-lg flex items-center justify-center border-2 border-accent/50 shadow-lg hidden">
+                            <img id="drawn-card" src="" alt="抽取的塔罗牌" class="max-h-full rounded">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button id="draw-button" class="bg-accent hover:bg-accent/80 text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                        抽取塔罗牌 <i class="fa fa-random ml-2"></i>
+                    </button>
+                </div>
+                
+                <div id="reading-result" class="mt-10 bg-dark/70 rounded-lg p-6 border border-secondary/30 hidden">
+                    <h3 class="text-xl font-semibold text-accent mb-4">牌面解读</h3>
+                    <div id="card-name" class="text-lg font-medium mb-2"></div>
+                    <div id="card-meaning" class="text-light/80"></div>
+                </div>
             </div>
-        </nav>
-    </header>
+        </section>
+    </main>
 
-    <section class="hero">
-        <h1>探索命运的奥秘</h1>
-        <p>融合东方紫微斗数与西方星座学，为您揭示人生轨迹</p>
-    </section>
-
-    <section class="features" id="features">
-        <div class="feature-grid">
-            <div class="feature-item">
-                <h3>紫微斗数</h3>
-                <p>源自古老东方智慧，精准解读人生命盘</p>
+    <!-- 页脚 -->
+    <footer class="bg-dark/80 backdrop-blur-md py-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fa fa-star-o text-accent mr-2"></i> 神秘塔罗
+                    </h3>
+                    <p class="text-light/70 mb-4">探索古老智慧，揭示命运奥秘。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-light/70 hover:text-accent transition-colors">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-light/70 hover:text-accent transition-colors">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-light/70 hover:text-accent transition-colors">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-light/70 hover:text-accent transition-colors">
+                            <i class="fa fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">快速链接</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-light/70 hover:text-accent transition-colors">首页</a></li>
+                        <li><a href="#readings" class="text-light/70 hover:text-accent transition-colors">占卜方式</a></li>
+                        <li><a href="#tarot-deck" class="text-light/70 hover:text-accent transition-colors">塔罗牌库</a></li>
+                        <li><a href="#about" class="text-light/70 hover:text-accent transition-colors">关于我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">占卜类型</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">爱情占卜</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">事业占卜</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">财运占卜</a></li>
+                        <li><a href="#" class="text-light/70 hover:text-accent transition-colors">健康占卜</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">联系我们</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope text-accent mt-1 mr-2"></i>
+                            <span class="text-light/70">contact@mystictarot.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-phone text-accent mt-1 mr-2"></i>
+                            <span class="text-light/70">+86 123 4567 8910</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker text-accent mt-1 mr-2"></i>
+                            <span class="text-light/70">广东省深圳市龙华区龙军花园220A</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="feature-item">
-                <h3>星座解析</h3>
-                <p>结合西方占星学，全方位剖析性格特质</p>
+            <div class="border-t border-secondary/20 mt-8 pt-8 text-center text-light/50">
+                <p>&copy; 2025 神秘塔罗 | 探索命运的奥秘 | 保留所有权利</p>
             </div>
-            <div class="feature-item">
-                <h3>易经预测</h3>
-                <p>运用周易卦象，预知未来吉凶</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="copyright">
-            <p>© 2024 玄学运势 版权所有</p>
-            <p>开发者：周峰 | 联系方式：mxdloveqqq@gmail.com</p>
         </div>
     </footer>
 
     <script>
-        // 优化下拉菜单交互
-        document.querySelectorAll('select').forEach(select => {
-            select.addEventListener('mouseover', function(e) {
-                const rect = this.getBoundingClientRect();
-                const mouseY = e.clientY - rect.top;
-                const optionHeight = rect.height / this.options.length;
-                const index = Math.floor(mouseY / optionHeight);
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-lg');
+                navbar.classList.remove('py-3');
+            } else {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-2', 'shadow-lg');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
                 
-                if(index >= 0 && index < this.options.length) {
-                    this.selectedIndex = index;
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 关闭移动端菜单
+                    document.getElementById('mobile-menu').classList.add('hidden');
                 }
             });
         });
+
+        // 塔罗牌数据（简化版）
+        const tarotCards = [
+            {
+                name: "愚者",
+                image: "https://picsum.photos/seed/fool/200/300",
+                meaning: "愚者代表新的开始、自由、天真和无限的可能性。这张牌提醒你要勇于冒险，相信自己的直觉，不要被恐惧所束缚。在正位时，它预示着新的机会即将出现，你需要以开放的心态去迎接它们。"
+            },
+            {
+                name: "魔术师",
+                image: "https://picsum.photos/seed/magician/200/300",
+                meaning: "魔术师象征着创造力、资源、行动和意志力。你拥有实现目标所需的一切能力，现在是将想法付诸行动的时候了。正位的魔术师提醒你要相信自己的能力，善于利用周围的资源，发挥出最大的潜力。"
+            },
+            {
+                name: "女祭司",
+                image: "https://picsum.photos/seed/priestess/200/300",
+                meaning: "女祭司代表直觉、潜意识、智慧和神秘知识。你内在的直觉和洞察力正在增强，需要倾听内心的声音。正位的女祭司提醒你要相信自己的直觉，探索内心世界，可能会有隐藏的真相被揭示。"
+            },
+            {
+                name: "皇后",
+                image: "https://picsum.photos/seed/empress/200/300",
+                meaning: "皇后象征着丰饶、创造力、滋养和女性力量。这是一个充满活力和创造力的时期，你可能会感受到生活的富足和满足。正位的皇后鼓励你发挥自己的创造力，关爱自己和他人，享受生活带来的美好。"
+            },
+            {
+                name: "皇帝",
+                image: "https://picsum.photos/seed/emperor/200/300",
+                meaning: "皇帝代表权威、领导力、结构和秩序。你需要建立清晰的目标和计划，并采取果断的行动来实现它们。正位的皇帝提醒你要发挥自己的领导力，建立稳定的基础，为未来的发展做好准备。"
+            },
+            {
+                name: "恋人",
+                image: "https://picsum.photos/seed/lovers/200/300",
+                meaning: "恋人象征着选择、关系、平衡和和谐。这张牌通常与重要的决定或关系有关，你需要在两者之间做出选择。正位的恋人提醒你要倾听自己内心的声音，考虑各方利益，做出明智的决定。"
+            }
+        ];
+
+        // 抽取塔罗牌功能
+        document.getElementById('draw-button').addEventListener('click', function() {
+            const question = document.getElementById('question').value;
+            if (!question.trim()) {
+                alert('请先输入你的问题');
+                return;
+            }
+            
+            // 随机选择一张牌
+            const randomIndex = Math.floor(Math.random() * tarotCards.length);
+            const selectedCard = tarotCards[randomIndex];
+            
+            // 显示牌面
+            const tarotCard = document.getElementById('tarot-card');
+            const drawnCard = document.getElementById('drawn-card');
+            const cardName = document.getElementById('card-name');
+            const cardMeaning = document.getElementById('card-meaning');
+            const readingResult = document.getElementById('reading-result');
+            
+            // 设置牌面图片
+            drawnCard.src = selectedCard.image;
+            drawnCard.alt = selectedCard.name;
+            
+            // 显示结果区域
+            readingResult.classList.remove('hidden');
+            
+            // 设置牌名和解读
+            cardName.textContent = selectedCard.name;
+            cardMeaning.textContent = selectedCard.meaning;
+            
+            // 添加翻转动画
+            tarotCard.classList.add('card-flipped');
+            tarotCard.querySelector('.card-back').classList.remove('hidden');
+        });
     </script>
 </body>
-</html>
-<style>
-    /* 设置下拉菜单中数字的颜色 */
-    select option {
-        color: black;
-    }
-
-    /* 设置网站背景色为紫色 */
-    body {
-        background-color: #f3e5f5; /* 使用浅紫色作为背景色 */
-    }
-
-    /* 确保内容区域清晰可读 */
-    .hero, .features, .footer {
-        background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
-        margin: 20px 0;
-        padding: 20px;
-        border-radius: 8px;
-    }
-</style>
-<style>
-    /* 设置生日输入框中的文字颜色为黑色 */
-    input[type="number"] {
-        color: black;
-    }
-
-    /* 创建紫色星空背景效果 */
-    body {
-        background: linear-gradient(to bottom, #2c1445, #4a1d6e);
-        position: relative;
-        overflow: hidden;
-    }
-
-    /* 添加星星效果 */
-    body:before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: 
-            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 4px),
-            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 3px),
-            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 4px);
-        background-size: 550px 550px, 350px 350px, 250px 250px;
-        background-position: 0 0, 40px 60px, 130px 270px;
-        z-index: -1;
-        animation: twinkle 15s linear infinite;
-    }
-
-    @keyframes twinkle {
-        from {
-            transform: translateY(0);
-        }
-        to {
-            transform: translateY(-550px);
-        }
-    }
-</style>
-<style>
-    /* 设置生日输入框的背景颜色 */
-    input[type="date"] {
-        background-color: rgba(253, 253, 253, 0.9);
-    }
-</style>
-<style>
-    /* 设置数字输入框的样式 */
-    .birth-input {
-        width: 50px;
-        padding: 5px;
-        margin: 0 5px;
-        background-color: rgba(253, 253, 253, 0.9);
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    .birth-input:invalid {
-        border-color: red;
-    }
-
-    .birth-group {
-        margin: 10px 0;
-    }
-
-    .error-message {
-        color: red;
-        font-size: 14px;
-        display: none;
-        margin-top: 5px;
-    }
-</style>
-
-<script>
-    function validateBirthDate() {
-        const year = parseInt(document.getElementById('birth-year').value);
-        const month = parseInt(document.getElementById('birth-month').value);
-        const day = parseInt(document.getElementById('birth-day').value);
-        const errorMsg = document.getElementById('birth-error');
-
-        // 获取当前年份
-        const currentYear = new Date().getFullYear();
-
-        // 验证年份
-        if (year < 1900 || year > currentYear) {
-            errorMsg.style.display = 'block';
-            errorMsg.textContent = '请输入有效的年份(1900-' + currentYear + ')';
-            return false;
-        }
-
-        // 验证月份
-        if (month < 1 || month > 12) {
-            errorMsg.style.display = 'block';
-            errorMsg.textContent = '请输入有效的月份(1-12)';
-            return false;
-        }
-
-        // 获取每月天数
-        const daysInMonth = new Date(year, month, 0).getDate();
-
-        // 验证日期
-        if (day < 1 || day > daysInMonth) {
-            errorMsg.style.display = 'block';
-            errorMsg.textContent = '请输入有效的日期(1-' + daysInMonth + ')';
-            return false;
-        }
-
-        errorMsg.style.display = 'none';
-        return true;
-    }
-</script>
-
-<div class="birth-group">
-    <input type="number" id="birth-year" class="birth-input" placeholder="年" min="1900" max="2099" required onchange="validateBirthDate()">年
-    <input type="number" id="birth-month" class="birth-input" placeholder="月" min="1" max="12" required onchange="validateBirthDate()">月
-    <input type="number" id="birth-day" class="birth-input" placeholder="日" min="1" max="31" required onchange="validateBirthDate()">日
-    <div id="birth-error" class="error-message"></div>
-</div>
+</html>    

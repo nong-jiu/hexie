@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家教单管理系统</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .login-form {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-form input {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            margin: 0 10px;
+            font-size: 16px;
+            width: 200px;
+        }
+        
+        .login-form button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .login-form button:hover {
+            background: #5a6fd8;
+        }
+        
+        .admin-panel {
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6169;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .preview-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .preview-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .order-preview {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        
+        .status-message {
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .help-text {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 登录表单 -->
+        <div class="login-form" id="loginForm">
+            <h1>🔐 管理员登录</h1>
+            <input type="password" id="adminPassword" placeholder="请输入管理密码" />
+            <button onclick="login()">登录</button>
+        </div>
+        
+        <!-- 管理面板 -->
+        <div class="admin-panel" id="adminPanel">
+            <h1>📋 家教单管理系统</h1>
+            
+            <div class="stats" id="statsContainer">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalOrders">0</div>
+                    <div class="stat-label">总订单数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="lastUpdate">未更新</div>
+                    <div class="stat-label">最后更新</div>
+                </div>
+            </div>
+            
+            <div class="help-text">
+                <strong>📌 使用说明：</strong><br>
+                1. 将家教单数据复制粘贴到下方文本框中<br>
+                2. 每个订单之间用空行分隔<br>
+                3. 点击"解析预览"检查数据格式<br>
+                4. 确认无误后点击"更新网站数据"<br>
+                5. <strong>🎉 网站将立即实时更新，无需下载文件！</strong>
+            </div>
+            
+            <div class="form-group">
+                <label for="orderData">粘贴家教单数据：</label>
+                <textarea id="orderData" placeholder="请将家教单数据粘贴到这里...
+
+示例格式：
+暑假单
+【订单：25071206x】
+家长称呼：
+孩子年级：准高二
+科目：数学
+成绩：50-70
+孩子性别：男
+课酬：300/时 600/次
+老师性别：不限
+对老师的要求：专职老师
+次数：待定
+辅导时间：暑假7、8月上课，每次课两小时（周二下午试课）
+上门地址：南山区12号线中山公园A出口
+
+【订单：25071205a】
+家长称呼：李先生
+..."></textarea>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-secondary" onclick="clearData()">清空数据</button>
+                <button class="btn-primary" onclick="parseData()">解析预览</button>
+                <button class="btn-success" onclick="updateWebsite()">更新网站数据</button>
+            </div>
+            
+            <div id="statusMessage"></div>
+            
+            <div class="preview-section" id="previewSection" style="display: none;">
+                <h3>📋 解析结果预览</h3>
+                <div id="previewContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 管理员密码 (可以修改)
+        const ADMIN_PASSWORD = 'mdjj2024';
+        
+        let parsedOrders = [];
+        
+        // 登录验证
+        function login() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('adminPanel').classList.add('active');
+                loadStats();
+            } else {
+                alert('密码错误！');
+            }
+        }
+        
+        // 加载统计信息
+        function loadStats() {
+            const currentData = localStorage.getItem('tutorOrders');
+            const orders = currentData ? JSON.parse(currentData) : [];
+            const lastUpdate = localStorage.getItem('lastUpdate') || '未更新';
+            
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('lastUpdate').textContent = lastUpdate;
+        }
+        
+        // 清空数据
+        function clearData() {
+            document.getElementById('orderData').value = '';
+            document.getElementById('previewSection').style.display = 'none';
+            showMessage('数据已清空', 'info');
+        }
+        
+        // 解析数据
+        function parseData() {
+            const rawData = document.getElementById('orderData').value.trim();
+            if (!rawData) {
+                showMessage('请先输入家教单数据', 'error');
+                return;
+            }
+            
+            try {
+                parsedOrders = parseOrderData(rawData);
+                if (parsedOrders.length > 0) {
+                    showPreview(parsedOrders);
+                    showMessage(`成功解析 ${parsedOrders.length} 个订单`, 'success');
+                } else {
+                    showMessage('未能解析到有效订单数据，请检查格式', 'error');
+                }
+            } catch (error) {
+                showMessage('解析失败：' + error.message, 'error');
+            }
+        }
+        
+        // 解析订单数据
+        function parseOrderData(rawData) {
+            const orders = [];
+            const blocks = rawData.split(/\n\s*\n/).filter(block => block.trim());
+            
+            for (const block of blocks) {
+                const lines = block.split('\n').map(line => line.trim()).filter(line => line);
+                const order = {};
+                
+                // 解析每一行
+                for (const line of lines) {
+                    if (line.includes('【订单：') && line.includes('】')) {
+                        order.id = line.match(/【订单：(.+?)】/)?.[1] || '';
+                    } else if (line.startsWith('家长称呼：')) {
+                        order.parentName = line.replace('家长称呼：', '').trim();
+                    } else if (line.startsWith('孩子年级：')) {
+                        let grade = line.replace('孩子年级：', '').trim();
+                        if (grade.startsWith('准')) {
+                            grade = grade.substring(1);
+                        }
+                        order.grade = grade;
+                    } else if (line.startsWith('科目：')) {
+                        order.subject = line.replace('科目：', '').trim();
+                    } else if (line.startsWith('成绩：')) {
+                        order.score = line.replace('成绩：', '').trim();
+                    } else if (line.startsWith('孩子性别：')) {
+                        order.studentGender = line.replace('孩子性别：', '').trim();
+                    } else if (line.startsWith('课酬：')) {
+                        order.salary = line.replace('课酬：', '').trim();
+                    } else if (line.startsWith('老师性别：')) {
+                        order.teacherGender = line.replace('老师性别：', '').trim();
+                    } else if (line.startsWith('对老师的要求：')) {
+                        order.requirements = line.replace('对老师的要求：', '').trim();
+                    } else if (line.startsWith('次数：')) {
+                        order.frequency = line.replace('次数：', '').trim();
+                    } else if (line.startsWith('辅导时间：')) {
+                        order.time = line.replace('辅导时间：', '').trim();
+                    } else if (line.startsWith('上门地址：')) {
+                        order.address = line.replace('上门地址：', '').trim();
+                        // 自动识别地区
+                        order.region = extractRegion(order.address);
+                    }
+                }
+                
+                // 新增：根据年级自动分类
+                order.gradeCategory = autoClassifyGrade(order.grade || '');
+
+                // 新增：根据要求自动分类老师类型
+                order.teacherType = [];
+                const reqText = order.requirements || '';
+                if (/大学生|大学|研究生/.test(reqText)) {
+                    order.teacherType.push('大学生');
+                }
+                if (/专职|在校|机构/.test(reqText)) {
+                    order.teacherType.push('专职老师');
+                }
+
+                // 自动分类
+                order.category = autoClassify(order);
+                
+                if (order.id) {
+                    orders.push(order);
+                }
+            }
+            
+            return orders;
+        }
+        
+        // 提取地区信息
+        function extractRegion(address) {
+            const regions = ['福田区', '罗湖区', '盐田区', '南山区', '宝安区', '龙岗区', '龙华区', '坪山区', '光明区', '大鹏新区'];
+            for (const region of regions) {
+                if (address.includes(region)) {
+                    return region;
+                }
+            }
+            return '其他大亚湾区';
+        }
+
+        // 新增：自动分类年级
+        function autoClassifyGrade(grade) {
+            if (/幼儿园|幼儿|大班|中班|小班/.test(grade)) return '幼儿';
+            if (/一年级|二年级|三年级|四年级|五年级|六年级|小学|1年级|2年级|3年级|4年级|5年级|6年级/.test(grade)) return '小学';
+            if (/初中|初一|八年级|九年级|初二|初三|7年级|8年级|9年级/.test(grade)) return '初中';
+            if (/高中|高一|高二|高三|十年级/.test(grade)) return '高中';
+            if (/大学生|成人|成年人/.test(grade)) return '成人';
+            return ''; // 默认无分类
+        }
+        
+        // 自动分类
+        function autoClassify(order) {
+            const categories = [];
+            
+            // 基础分类
+            categories.push('latest');
+            
+            // 根据课酬判断高价单
+            if (order.salary && (order.salary.includes('300') || order.salary.includes('350') || order.salary.includes('400'))) {
+                categories.push('high-price');
+            }
+            
+            // 根据时间判断类型
+            if (order.time) {
+                if (order.time.includes('暑假') || order.time.includes('寒假')) {
+                    categories.push('summer');
+                }
+                if (order.time.includes('周末') || order.time.includes('周六') || order.time.includes('周日')) {
+                    categories.push('weekend');
+                }
+                if (order.time.includes('晚上') || order.time.includes('晚')) {
+                    categories.push('evening');
+                }
+                if (order.time.includes('周一') && order.time.includes('周五')) {
+                    categories.push('daily');
+                }
+            }
+            
+            // 根据要求判断加急单
+            if (order.requirements && (order.requirements.includes('急') || order.requirements.includes('马上'))) {
+                categories.push('urgent');
+            }
+            
+            return categories;
+        }
+        
+        // 显示预览
+        function showPreview(orders) {
+            const container = document.getElementById('previewContainer');
+            container.innerHTML = '';
+            
+            orders.forEach((order, index) => {
+                const preview = document.createElement('div');
+                preview.className = 'order-preview';
+                preview.innerHTML = `
+                    <strong>订单 ${index + 1}：${order.id}</strong><br>
+                    年级：${order.grade || '未填写'} | 科目：${order.subject || '未填写'} | 课酬：${order.salary || '未填写'}<br>
+                    地区：${order.region || '未识别'} | 分类：${order.category.join(', ')}
+                `;
+                container.appendChild(preview);
+            });
+            
+            document.getElementById('previewSection').style.display = 'block';
+        }
+        
+        // 更新网站数据
+        function updateWebsite() {
+            if (parsedOrders.length === 0) {
+                showMessage('请先解析数据', 'error');
+                return;
+            }
+            
+            try {
+                // 保存到 localStorage
+                localStorage.setItem('tutorOrders', JSON.stringify(parsedOrders));
+                localStorage.setItem('lastUpdate', new Date().toLocaleString('zh-CN'));
+                
+                // 触发主页面实时更新
+                triggerMainPageUpdate();
+                
+                showMessage(`✅ 成功更新 ${parsedOrders.length} 个订单到网站！网站数据已实时更新`, 'success');
+                loadStats();
+                
+                // 3秒后可选择跳转到主页
+                setTimeout(() => {
+                    if (confirm('数据更新成功！是否跳转到主页查看效果？')) {
+                        window.open('./index.html', '_blank');
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                showMessage('更新失败：' + error.message, 'error');
+            }
+        }
+        
+        // 触发主页面更新
+        function triggerMainPageUpdate() {
+            // 方法1: 触发storage事件（如果在同一个浏览器标签页中）
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'tutorOrders',
+                newValue: localStorage.getItem('tutorOrders'),
+                url: window.location.href
+            }));
+            
+            // 方法2: 使用BroadcastChannel API（现代浏览器）
+            if (typeof BroadcastChannel !== 'undefined') {
+                const channel = new BroadcastChannel('tutor-orders-update');
+                channel.postMessage({
+                    type: 'data-updated',
+                    count: parsedOrders.length,
+                    timestamp: new Date().toISOString()
+                });
+                channel.close();
+            }
+            
+            // 方法3: 使用postMessage（如果页面在iframe中）
+            if (window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'tutor-orders-updated',
+                    count: parsedOrders.length
+                }, '*');
+            }
+        }
+        
+        // 更新主网站数据
+        function updateMainSiteData(orders) {
+            // 由于是静态网站，我们通过修改 script.js 的方式来更新数据
+            const jsContent = generateUpdatedJavaScript(orders);
+            
+            // 创建下载链接让用户下载更新后的 script.js
+            const blob = new Blob([jsContent], { type: 'text/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'script.js';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 生成更新后的JavaScript代码
+        function generateUpdatedJavaScript(orders) {
+            const orderDataString = JSON.stringify(orders, null, 4);
+            
+            return `// 家教订单数据 - 由管理系统自动生成于 ${new Date().toLocaleString('zh-CN')}
+const orderData = ${orderDataString};
+
+// 全局变量
+let filteredData = orderData;
+let currentCategory = 'all';
+
+// DOM元素
+const orderList = document.getElementById('orderList');
+const regionFilter = document.getElementById('regionFilter');
+const gradeFilter = document.getElementById('gradeFilter');
+const subjectFilter = document.getElementById('subjectFilter');
+const orderSearch = document.getElementById('orderSearch');
+const tabBtns = document.querySelectorAll('.tab-btn');
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    renderOrders(orderData);
+    bindEvents();
+});
+
+// 绑定事件
+function bindEvents() {
+    // 筛选器事件
+    regionFilter.addEventListener('change', filterOrders);
+    gradeFilter.addEventListener('change', filterOrders);
+    subjectFilter.addEventListener('change', filterOrders);
+    orderSearch.addEventListener('input', filterOrders);
+    
+    // 分类标签事件
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 更新活跃状态
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            currentCategory = this.dataset.category;
+            filterOrders();
+        });
+    });
+}
+
+// 渲染订单列表
+function renderOrders(orders) {
+    if (!orders || orders.length === 0) {
+        orderList.innerHTML = '<div class="empty-state">暂无符合条件的订单</div>';
+        return;
+    }
+    
+    const ordersHtml = orders.map(order => createOrderCard(order)).join('');
+    orderList.innerHTML = ordersHtml;
+    
+    // 绑定复制按钮事件
+    bindCopyEvents();
+}
+
+// 创建订单卡片
+function createOrderCard(order) {
+    const tags = getOrderTags(order);
+    
+    return \`
+        <div class="order-card" data-id="\${order.id}">
+            <div class="order-header">
+                <div class="order-id">
+                    【订单：\${order.id}】
+                    \${tags}
+                </div>
+                <button class="copy-btn" data-copy="\${order.id}">复制本单</button>
+            </div>
+            
+            <div class="order-content">
+                <div class="order-item">
+                    <span class="order-label">家长称呼：</span>
+                    <span class="order-value">\${order.parentName || '未填写'}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">孩子年级：</span>
+                    <span class="order-value">\${order.grade}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">科目：</span>
+                    <span class="order-value">\${order.subject}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">成绩：</span>
+                    <span class="order-value">\${order.score}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">孩子性别：</span>
+                    <span class="order-value">\${order.studentGender}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">课酬：</span>
+                    <span class="order-value order-salary">\${order.salary}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">老师性别：</span>
+                    <span class="order-value">\${order.teacherGender}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">次数：</span>
+                    <span class="order-value">\${order.frequency}</span>
+                </div>
+                
+                <div class="order-address">
+                    <div class="order-item">
+                        <span class="order-label">上门地址：</span>
+                        <span class="order-value">\${order.address}</span>
+                        <button class="copy-address" data-copy-address="\${order.address}">复制地址</button>
+                    </div>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">辅导时间：</span>
+                    <span class="order-value">\${order.time}</span>
+                </div>
+                
+                <div class="order-requirements">
+                    <strong>对老师的要求：</strong>\${order.requirements}
+                </div>
+            </div>
+        </div>
+    \`;
+}
+
+// 获取订单标签
+function getOrderTags(order) {
+    let tags = '';
+    
+    if (order.category.includes('urgent')) {
+        tags += '<span class="order-tag urgent">加急</span>';
+    }
+    if (order.category.includes('high-price')) {
+        tags += '<span class="order-tag high-price">高价</span>';
+    }
+    if (order.category.includes('summer')) {
+        tags += '<span class="order-tag summer">暑假单</span>';
+    }
+    if (order.category.includes('weekend')) {
+        tags += '<span class="order-tag weekend">周末</span>';
+    }
+    if (order.category.includes('evening')) {
+        tags += '<span class="order-tag evening">晚上</span>';
+    }
+    if (order.category.includes('daily')) {
+        tags += '<span class="order-tag daily">日常</span>';
+    }
+    
+    return tags;
+}
+
+// 筛选订单
+function filterOrders() {
+    const region = regionFilter.value.toLowerCase();
+    const grade = gradeFilter.value.toLowerCase();
+    const subject = subjectFilter.value.toLowerCase();
+    const searchTerm = orderSearch.value.toLowerCase();
+    
+    filteredData = orderData.filter(order => {
+        // 地区筛选
+        if (region && !order.region.toLowerCase().includes(region)) {
+            return false;
+        }
+        
+        // 年级筛选
+        if (grade && !order.grade.toLowerCase().includes(grade)) {
+            return false;
+        }
+        
+        // 科目筛选
+        if (subject && !order.subject.toLowerCase().includes(subject)) {
+            return false;
+        }
+        
+        // 搜索筛选
+        if (searchTerm && !order.id.toLowerCase().includes(searchTerm)) {
+            return false;
+        }
+        
+        // 分类筛选
+        if (currentCategory !== 'all' && !order.category.includes(currentCategory)) {
+            return false;
+        }
+        
+        return true;
+    });
+    
+    renderOrders(filteredData);
+}
+
+// 绑定复制事件
+function bindCopyEvents() {
+    // 复制订单按钮
+    const copyBtns = document.querySelectorAll('[data-copy]');
+    copyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.dataset.copy;
+            const order = orderData.find(o => o.id === orderId);
+            if (order) {
+                const orderText = formatOrderForCopy(order);
+                copyToClipboard(orderText, '订单信息已复制');
+            }
+        });
+    });
+    
+    // 复制地址按钮
+    const copyAddressBtns = document.querySelectorAll('[data-copy-address]');
+    copyAddressBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const address = this.dataset.copyAddress;
+            copyToClipboard(address, '地址已复制');
+        });
+    });
+}
+
+// 格式化订单用于复制
+function formatOrderForCopy(order) {
+    return \`【订单：\${order.id}】
+家长称呼：\${order.parentName || ''}
+孩子年级：\${order.grade}
+科目：\${order.subject}
+成绩：\${order.score}
+孩子性别：\${order.studentGender}
+课酬：\${order.salary}
+老师性别：\${order.teacherGender}
+对老师的要求：\${order.requirements}
+次数：\${order.frequency}
+辅导时间：\${order.time}
+上门地址：\${order.address}\`;
+}
+
+// 复制到剪贴板
+function copyToClipboard(text, message = '已复制') {
+    if (navigator.clipboard && window.isSecureContext) {
+        // 现代浏览器支持
+        navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess(message);
+        }).catch(() => {
+            fallbackCopy(text, message);
+        });
+    } else {
+        // 兼容旧浏览器
+        fallbackCopy(text, message);
+    }
+}
+
+// 兼容旧浏览器的复制方法
+function fallbackCopy(text, message) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showCopySuccess(message);
+    } catch (err) {
+        console.error('复制失败:', err);
+        showCopySuccess('复制失败，请手动复制');
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+// 显示复制成功提示
+function showCopySuccess(message) {
+    // 移除已存在的提示
+    const existingToast = document.querySelector('.copy-success');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // 创建新提示
+    const toast = document.createElement('div');
+    toast.className = 'copy-success';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // 2秒后自动移除
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 2000);
+}
+
+// 搜索功能增强
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// 使用防抖优化搜索
+orderSearch.addEventListener('input', debounce(filterOrders, 300));`;
+        }
+        
+        // 显示状态消息
+        function showMessage(message, type) {
+            const container = document.getElementById('statusMessage');
+            container.innerHTML = `<div class="status-message status-${type}">${message}</div>`;
+            
+            // 3秒后自动清除
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+        
+        // 监听回车键登录
+        document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>

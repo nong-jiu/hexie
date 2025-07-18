@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub管理助手</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #24292e 0%, #586069 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #24292e;
+            margin-bottom: 30px;
+        }
+        
+        .github-info {
+            background: #f6f8fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0366d6;
+            margin-bottom: 30px;
+        }
+        
+        .steps {
+            counter-reset: step-counter;
+        }
+        
+        .step {
+            counter-increment: step-counter;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            position: relative;
+        }
+        
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: -10px;
+            background: #28a745;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .step h3 {
+            margin-top: 0;
+            color: #24292e;
+        }
+        
+        .code-block {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 10px 0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .file-tree {
+            background: #f6f8fa;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .generator-section {
+            background: #e6f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        
+        button {
+            background: #0366d6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+        }
+        
+        button:hover {
+            background: #0256cc;
+        }
+        
+        .download-section {
+            display: none;
+            background: #f0f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 GitHub Pages 部署指南</h1>
+        
+        <div class="github-info">
+            <h3>📋 GitHub Pages 实时更新原理</h3>
+            <p>由于 GitHub Pages 是静态托管，我们通过以下方式实现"伪实时"更新：</p>
+            <ul>
+                <li>📄 数据存储在 <code>data/orders.json</code> 文件中</li>
+                <li>🔄 网站每30秒自动检查文件更新</li>
+                <li>📝 管理员通过修改JSON文件更新数据</li>
+                <li>⚡ 访问者看到准实时更新（最多延迟30秒）</li>
+            </ul>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <h3>创建 GitHub 仓库</h3>
+                <p>1. 登录 GitHub，创建新仓库（建议命名：<code>tutor-website</code>）</p>
+                <p>2. 设置仓库为 Public（免费账户只能用 Public 仓库部署 Pages）</p>
+                <p>3. 初始化时勾选 "Add a README file"</p>
+            </div>
+
+            <div class="step">
+                <h3>上传网站文件</h3>
+                <p>将以下文件上传到仓库根目录：</p>
+                <div class="file-tree">
+📁 仓库根目录/
+├── 📄 index.html
+├── 📄 style.css  
+├── 📄 script.js
+├── 📄 admin.html
+└── 📁 data/
+    └── 📄 orders.json
+                </div>
+                <div class="warning">
+                    <strong>⚠️ 重要：</strong>确保 <code>data/orders.json</code> 文件路径正确，这是数据存储的核心文件！
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>启用 GitHub Pages</h3>
+                <p>1. 进入仓库的 <strong>Settings</strong> 页面</p>
+                <p>2. 找到左侧菜单的 <strong>Pages</strong> 选项</p>
+                <p>3. 在 Source 下选择 <strong>Deploy from a branch</strong></p>
+                <p>4. Branch 选择 <strong>main</strong>，目录选择 <strong>/ (root)</strong></p>
+                <p>5. 点击 <strong>Save</strong></p>
+                <div class="success">
+                    <strong>✅ 成功：</strong>几分钟后，你的网站将在 <code>https://yourname.github.io/tutor-website</code> 上线！
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>每日更新流程</h3>
+                <p><strong>方式1：网页界面更新（推荐）</strong></p>
+                <ol>
+                    <li>访问 GitHub 仓库页面</li>
+                    <li>点击 <code>data/orders.json</code> 文件</li>
+                    <li>点击编辑按钮（铅笔图标）</li>
+                    <li>使用下方的 JSON 生成器生成新内容</li>
+                    <li>替换文件内容，写上提交信息如 "更新7月12日家教单"</li>
+                    <li>点击 <strong>Commit changes</strong></li>
+                </ol>
+                
+                <p><strong>方式2：Git 命令更新</strong></p>
+                <div class="code-block">
+# 克隆仓库到本地
+git clone https://github.com/yourname/tutor-website.git
+cd tutor-website
+
+# 修改 data/orders.json 文件
+# 提交更改
+git add data/orders.json
+git commit -m "更新家教单数据"
+git push origin main
+                </div>
+            </div>
+        </div>
+
+        <div class="generator-section">
+            <h3>🛠️ JSON 数据生成器</h3>
+            <p>将家教单数据粘贴到下方，自动转换为 JSON 格式：</p>
+            
+            <textarea id="rawData" placeholder="粘贴家教单数据...
+
+示例：
+暑假单
+【订单：25071210x】
+家长称呼：张先生
+孩子年级：准高二
+科目：数学
+成绩：60-80
+孩子性别：男
+课酬：280/时
+..."></textarea>
+            
+            <div>
+                <button onclick="generateJSON()">🔄 生成 JSON</button>
+                <button onclick="copyJSON()" id="copyBtn" style="display:none;">📋 复制 JSON</button>
+                <button onclick="downloadJSON()" id="downloadBtn" style="display:none;">💾 下载文件</button>
+            </div>
+            
+            <div class="download-section" id="resultSection">
+                <h4>✅ 生成的 JSON 数据：</h4>
+                <textarea id="jsonResult" readonly></textarea>
+                <p><strong>使用方法：</strong>复制上方内容，替换 GitHub 仓库中 <code>data/orders.json</code> 的内容</p>
+            </div>
+        </div>
+
+        <div class="success">
+            <h3>🎉 完成后的效果</h3>
+            <ul>
+                <li>✅ 网站在 GitHub Pages 上运行</li>
+                <li>✅ 用户访问时自动加载最新数据</li>
+                <li>✅ 每30秒自动检查更新</li>
+                <li>✅ 无需服务器成本，完全免费</li>
+                <li>✅ 支持自定义域名</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let generatedData = [];
+        
+        function generateJSON() {
+            const rawData = document.getElementById('rawData').value.trim();
+            if (!rawData) {
+                alert('请先输入家教单数据');
+                return;
+            }
+            
+            try {
+                const orders = parseOrderData(rawData);
+                if (orders.length > 0) {
+                    generatedData = orders;
+                    const jsonString = JSON.stringify(orders, null, 2);
+                    document.getElementById('jsonResult').value = jsonString;
+                    document.getElementById('resultSection').style.display = 'block';
+                    document.getElementById('copyBtn').style.display = 'inline-block';
+                    document.getElementById('downloadBtn').style.display = 'inline-block';
+                    alert(`成功生成 ${orders.length} 个订单的 JSON 数据！`);
+                } else {
+                    alert('未能解析到有效订单，请检查数据格式');
+                }
+            } catch (error) {
+                alert('解析失败：' + error.message);
+            }
+        }
+        
+        function copyJSON() {
+            const textarea = document.getElementById('jsonResult');
+            textarea.select();
+            document.execCommand('copy');
+            
+            const btn = document.getElementById('copyBtn');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ 已复制';
+            setTimeout(() => {
+                btn.textContent = originalText;
+            }, 2000);
+        }
+        
+        function downloadJSON() {
+            const content = document.getElementById('jsonResult').value;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'orders.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // 解析订单数据（复用管理页面的解析逻辑）
+        function parseOrderData(rawData) {
+            const orders = [];
+            const blocks = rawData.split(/\n\s*\n/).filter(block => block.trim());
+            
+            for (const block of blocks) {
+                const lines = block.split('\n').map(line => line.trim()).filter(line => line);
+                const order = {};
+                
+                for (const line of lines) {
+                    if (line.includes('【订单：') && line.includes('】')) {
+                        order.id = line.match(/【订单：(.+?)】/)?.[1] || '';
+                    } else if (line.startsWith('家长称呼：')) {
+                        order.parentName = line.replace('家长称呼：', '').trim();
+                    } else if (line.startsWith('孩子年级：')) {
+                        let grade = line.replace('孩子年级：', '').trim();
+                        if (grade.startsWith('准')) {
+                            grade = grade.substring(1);
+                        }
+                        order.grade = grade;
+                        order.gradeCategory = autoClassifyGrade(grade);
+                    } else if (line.startsWith('科目：')) {
+                        order.subject = line.replace('科目：', '').trim();
+                    } else if (line.startsWith('成绩：')) {
+                        order.score = line.replace('成绩：', '').trim();
+                    } else if (line.startsWith('孩子性别：')) {
+                        order.studentGender = line.replace('孩子性别：', '').trim();
+                    } else if (line.startsWith('课酬：')) {
+                        order.salary = line.replace('课酬：', '').trim();
+                    } else if (line.startsWith('老师性别：')) {
+                        order.teacherGender = line.replace('老师性别：', '').trim();
+                    } else if (line.startsWith('对老师的要求：')) {
+                        order.requirements = line.replace('对老师的要求：', '').trim();
+                    } else if (line.startsWith('次数：')) {
+                        order.frequency = line.replace('次数：', '').trim();
+                    } else if (line.startsWith('辅导时间：')) {
+                        order.time = line.replace('辅导时间：', '').trim();
+                    } else if (line.startsWith('上门地址：')) {
+                        order.address = line.replace('上门地址：', '').trim();
+                        order.region = extractRegion(order.address);
+                    }
+                }
+
+                // 新增：根据要求自动分类老师类型
+                order.teacherType = [];
+                const reqText = order.requirements || '';
+                if (/大学生|大学|研究生/.test(reqText)) {
+                    order.teacherType.push('大学生');
+                }
+                if (/专职|在校|机构/.test(reqText)) {
+                    order.teacherType.push('专职老师');
+                }
+                
+                // 自动分类
+                order.category = autoClassify(order);
+                
+                if (order.id) {
+                    orders.push(order);
+                }
+            }
+            
+            return orders;
+        }
+        
+        // 提取地区信息
+        function extractRegion(address) {
+            const regions = ['福田区', '罗湖区', '盐田区', '南山区', '宝安区', '龙岗区', '龙华区', '坪山区', '光明区', '大鹏新区'];
+            for (const region of regions) {
+                if (address.includes(region)) {
+                    return region;
+                }
+            }
+            return '其他大亚湾区';
+        }
+
+        // 新增：自动分类年级
+        function autoClassifyGrade(grade) {
+            if (/幼儿园|幼儿|大班|中班|小班/.test(grade)) return '幼儿';
+            if (/一年级|二年级|三年级|四年级|五年级|六年级|小学|1年级|2年级|3年级|4年级|5年级|6年级/.test(grade)) return '小学';
+            if (/初中|初一|八年级|九年级|初二|初三|7年级|8年级|9年级/.test(grade)) return '初中';
+            if (/高中|高一|高二|高三|十年级/.test(grade)) return '高中';
+            if (/大学生|成人|成年人/.test(grade)) return '成人';
+            return ''; // 默认无分类
+        }
+
+        // 自动分类
+        function autoClassify(order) {
+            const categories = ['latest'];
+            
+            if (order.salary && (order.salary.includes('300') || order.salary.includes('350') || order.salary.includes('400'))) {
+                categories.push('high-price');
+            }
+            
+            if (order.time) {
+                if (order.time.includes('暑假') || order.time.includes('寒假')) {
+                    categories.push('summer');
+                }
+                if (order.time.includes('周末') || order.time.includes('周六') || order.time.includes('周日')) {
+                    categories.push('weekend');
+                }
+                if (order.time.includes('晚上') || order.time.includes('晚')) {
+                    categories.push('evening');
+                }
+                if (order.time.includes('周一') && order.time.includes('周五')) {
+                    categories.push('daily');
+                }
+            }
+            
+            if (order.requirements && (order.requirements.includes('急') || order.requirements.includes('马上'))) {
+                categories.push('urgent');
+            }
+            
+            return categories;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+// 家教订单数据 - 按照新格式
+const orderData = [
+    {
+        id: "25071206x",
+        parentName: "",
+        grade: "准高二",
+        subject: "数学",
+        score: "50-70",
+        studentGender: "男",
+        salary: "300/时 600/次",
+        teacherGender: "不限",
+        requirements: "专职老师",
+        frequency: "待定",
+        time: "暑假7、8月上课，每次课两小时（周二下午试课）",
+        address: "南山区12号线中山公园A出口",
+        category: ["summer", "high-price"],
+        region: "南山区"
+    },
+    {
+        id: "25071205a",
+        parentName: "李先生",
+        grade: "初三",
+        subject: "物理",
+        score: "60-75",
+        studentGender: "女",
+        salary: "200/时 400/次",
+        teacherGender: "不限",
+        requirements: "有经验的在职老师",
+        frequency: "每周2次",
+        time: "周末上午，每次2小时",
+        address: "福田区地铁7号线车公庙站B出口",
+        category: ["latest", "weekend"],
+        region: "福田区"
+    },
+    {
+        id: "25071204b",
+        parentName: "王女士",
+        grade: "小学五年级",
+        subject: "英语",
+        score: "70-85",
+        studentGender: "男",
+        salary: "150/时 300/次",
+        teacherGender: "女",
+        requirements: "英语专业，口语好",
+        frequency: "每周3次",
+        time: "周一三五晚上7-9点",
+        address: "罗湖区地铁1号线老街站A出口",
+        category: ["latest", "evening"],
+        region: "罗湖区"
+    },
+    {
+        id: "25071203c",
+        parentName: "张先生",
+        grade: "高一",
+        subject: "数学",
+        score: "40-60",
+        studentGender: "男",
+        salary: "250/时 500/次",
+        teacherGender: "不限",
+        requirements: "有高中教学经验",
+        frequency: "每周2次",
+        time: "周六日下午，每次2.5小时",
+        address: "宝安区地铁11号线机场站",
+        category: ["weekend", "urgent"],
+        region: "宝安区"
+    },
+    {
+        id: "25071202d",
+        parentName: "陈女士",
+        grade: "初二",
+        subject: "语文",
+        score: "65-80",
+        studentGender: "女",
+        salary: "180/时 360/次",
+        teacherGender: "女",
+        requirements: "师范类专业优先",
+        frequency: "每周2次",
+        time: "周二四晚上，每次2小时",
+        address: "南山区地铁2号线科苑站C出口",
+        category: ["latest"],
+        region: "南山区"
+    },
+    {
+        id: "25071201e",
+        parentName: "刘先生",
+        grade: "小学三年级",
+        subject: "全科辅导",
+        score: "中等",
+        studentGender: "男",
+        salary: "120/时 240/次",
+        teacherGender: "不限",
+        requirements: "有耐心，责任心强",
+        frequency: "每周5次",
+        time: "周一到周五放学后，每次2小时",
+        address: "龙岗区地铁3号线大运站",
+        category: ["daily", "primary"],
+        region: "龙岗区"
+    },
+    {
+        id: "25071130f",
+        parentName: "赵女士",
+        grade: "高三",
+        subject: "化学",
+        score: "55-70",
+        studentGender: "女",
+        salary: "350/时 700/次",
+        teacherGender: "不限",
+        requirements: "重点高中在职老师",
+        frequency: "每周3次",
+        time: "周三五日晚上，每次2小时",
+        address: "福田区地铁4号线市民中心站",
+        category: ["high-price", "senior"],
+        region: "福田区"
+    },
+    {
+        id: "25071129g",
+        parentName: "孙先生",
+        grade: "初一",
+        subject: "英语数学",
+        score: "70-85",
+        studentGender: "男",
+        salary: "160/时 320/次",
+        teacherGender: "女",
+        requirements: "大学生或研究生",
+        frequency: "每周3次",
+        time: "周一三五晚上，每次2小时",
+        address: "罗湖区地铁5号线怡景站",
+        category: ["latest", "junior"],
+        region: "罗湖区"
+    }
+];
+
+// 全局变量
+let filteredData = orderData;
+let currentCategory = 'all';
+
+// DOM元素
+const orderList = document.getElementById('orderList');
+const regionFilter = document.getElementById('regionFilter');
+const gradeFilter = document.getElementById('gradeFilter');
+const subjectFilter = document.getElementById('subjectFilter');
+const orderSearch = document.getElementById('orderSearch');
+const tabBtns = document.querySelectorAll('.tab-btn');
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    renderOrders(orderData);
+    bindEvents();
+});
+
+// 绑定事件
+function bindEvents() {
+    // 筛选器事件
+    regionFilter.addEventListener('change', filterOrders);
+    gradeFilter.addEventListener('change', filterOrders);
+    subjectFilter.addEventListener('change', filterOrders);
+    orderSearch.addEventListener('input', filterOrders);
+    
+    // 分类标签事件
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 更新活跃状态
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            currentCategory = this.dataset.category;
+            filterOrders();
+        });
+    });
+}
+
+// 渲染订单列表
+function renderOrders(orders) {
+    if (!orders || orders.length === 0) {
+        orderList.innerHTML = '<div class="empty-state">暂无符合条件的订单</div>';
+        return;
+    }
+    
+    const ordersHtml = orders.map(order => createOrderCard(order)).join('');
+    orderList.innerHTML = ordersHtml;
+    
+    // 绑定复制按钮事件
+    bindCopyEvents();
+}
+
+// 创建订单卡片
+function createOrderCard(order) {
+    const tags = getOrderTags(order);
+    
+    return `
+        <div class="order-card" data-id="${order.id}">
+            <div class="order-header">
+                <div class="order-id">
+                    【订单：${order.id}】
+                    ${tags}
+                </div>
+                <button class="copy-btn" data-copy="${order.id}">复制本单</button>
+            </div>
+            
+            <div class="order-content">
+                <div class="order-item">
+                    <span class="order-label">家长称呼：</span>
+                    <span class="order-value">${order.parentName || '未填写'}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">孩子年级：</span>
+                    <span class="order-value">${order.grade}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">科目：</span>
+                    <span class="order-value">${order.subject}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">成绩：</span>
+                    <span class="order-value">${order.score}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">孩子性别：</span>
+                    <span class="order-value">${order.studentGender}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">课酬：</span>
+                    <span class="order-value order-salary">${order.salary}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">老师性别：</span>
+                    <span class="order-value">${order.teacherGender}</span>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">次数：</span>
+                    <span class="order-value">${order.frequency}</span>
+                </div>
+                
+                <div class="order-address">
+                    <div class="order-item">
+                        <span class="order-label">上门地址：</span>
+                        <span class="order-value">${order.address}</span>
+                        <button class="copy-address" data-copy-address="${order.address}">复制地址</button>
+                    </div>
+                </div>
+                
+                <div class="order-item">
+                    <span class="order-label">辅导时间：</span>
+                    <span class="order-value">${order.time}</span>
+                </div>
+                
+                <div class="order-requirements">
+                    <strong>对老师的要求：</strong>${order.requirements}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// 获取订单标签
+function getOrderTags(order) {
+    let tags = '';
+    
+    if (order.category.includes('urgent')) {
+        tags += '<span class="order-tag urgent">加急</span>';
+    }
+    if (order.category.includes('high-price')) {
+        tags += '<span class="order-tag high-price">高价</span>';
+    }
+    if (order.category.includes('summer')) {
+        tags += '<span class="order-tag summer">暑假单</span>';
+    }
+    if (order.category.includes('weekend')) {
+        tags += '<span class="order-tag weekend">周末</span>';
+    }
+    if (order.category.includes('evening')) {
+        tags += '<span class="order-tag evening">晚上</span>';
+    }
+    if (order.category.includes('daily')) {
+        tags += '<span class="order-tag daily">日常</span>';
+    }
+    
+    return tags;
+}
+
+// 筛选订单
+function filterOrders() {
+    const region = regionFilter.value.toLowerCase();
+    const grade = gradeFilter.value.toLowerCase();
+    const subject = subjectFilter.value.toLowerCase();
+    const searchTerm = orderSearch.value.toLowerCase();
+    
+    filteredData = orderData.filter(order => {
+        // 地区筛选
+        if (region && !order.region.toLowerCase().includes(region)) {
+            return false;
+        }
+        
+        // 年级筛选
+        if (grade && !order.grade.toLowerCase().includes(grade)) {
+            return false;
+        }
+        
+        // 科目筛选
+        if (subject && !order.subject.toLowerCase().includes(subject)) {
+            return false;
+        }
+        
+        // 搜索筛选
+        if (searchTerm && !order.id.toLowerCase().includes(searchTerm)) {
+            return false;
+        }
+        
+        // 分类筛选
+        if (currentCategory !== 'all' && !order.category.includes(currentCategory)) {
+            return false;
+        }
+        
+        return true;
+    });
+    
+    renderOrders(filteredData);
+}
+
+// 绑定复制事件
+function bindCopyEvents() {
+    // 复制订单按钮
+    const copyBtns = document.querySelectorAll('[data-copy]');
+    copyBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderId = this.dataset.copy;
+            const order = orderData.find(o => o.id === orderId);
+            if (order) {
+                const orderText = formatOrderForCopy(order);
+                copyToClipboard(orderText, '订单信息已复制');
+            }
+        });
+    });
+    
+    // 复制地址按钮
+    const copyAddressBtns = document.querySelectorAll('[data-copy-address]');
+    copyAddressBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const address = this.dataset.copyAddress;
+            copyToClipboard(address, '地址已复制');
+        });
+    });
+}
+
+// 格式化订单用于复制
+function formatOrderForCopy(order) {
+    return `【订单：${order.id}】
+家长称呼：${order.parentName || ''}
+孩子年级：${order.grade}
+科目：${order.subject}
+成绩：${order.score}
+孩子性别：${order.studentGender}
+课酬：${order.salary}
+老师性别：${order.teacherGender}
+对老师的要求：${order.requirements}
+次数：${order.frequency}
+辅导时间：${order.time}
+上门地址：${order.address}`;
+}
+
+// 复制到剪贴板
+function copyToClipboard(text, message = '已复制') {
+    if (navigator.clipboard && window.isSecureContext) {
+        // 现代浏览器支持
+        navigator.clipboard.writeText(text).then(() => {
+            showCopySuccess(message);
+        }).catch(() => {
+            fallbackCopy(text, message);
+        });
+    } else {
+        // 兼容旧浏览器
+        fallbackCopy(text, message);
+    }
+}
+
+// 兼容旧浏览器的复制方法
+function fallbackCopy(text, message) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showCopySuccess(message);
+    } catch (err) {
+        console.error('复制失败:', err);
+        showCopySuccess('复制失败，请手动复制');
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+// 显示复制成功提示
+function showCopySuccess(message) {
+    // 移除已存在的提示
+    const existingToast = document.querySelector('.copy-success');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // 创建新提示
+    const toast = document.createElement('div');
+    toast.className = 'copy-success';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // 2秒后自动移除
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.parentNode.removeChild(toast);
+        }
+    }, 2000);
+}
+
+// 搜索功能增强
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// 使用防抖优化搜索
+orderSearch.addEventListener('input', debounce(filterOrders, 300));
+
+// 隐藏的管理入口提示
+function showAdminHint() {
+    const hint = prompt('🔐 管理员验证\n\n请输入访问密码:');
+    if (hint === 'mdjj2024') {
+        window.open('./admin.html', '_blank');
+    } else if (hint !== null) {
+        alert('密码错误！');
+    }
+}

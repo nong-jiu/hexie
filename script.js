@@ -466,15 +466,10 @@ function matchGradeCategory(grade, targetCategory) {
             return gradeStr.includes('小学') || 
                    gradeStr.includes('一年级') || gradeStr.includes('二年级') || 
                    gradeStr.includes('三年级') || gradeStr.includes('四年级') || 
-                   gradeStr.includes('五年级') || gradeStr.includes('六年级') ||
-                   gradeStr.includes('升') || gradeStr.includes('准');
+                   gradeStr.includes('五年级') || gradeStr.includes('六年级');
         case '初中':
             return gradeStr.includes('初中') || gradeStr.includes('初一') || 
-                   gradeStr.includes('初二') || gradeStr.includes('初三') ||
-                   gradeStr.includes('准初') || 
-                   (gradeStr.includes('七') && !gradeStr.includes('七年级下')) ||
-                   (gradeStr.includes('八') && !gradeStr.includes('八年级下')) ||
-                   (gradeStr.includes('九') && !gradeStr.includes('九年级下'));
+                   gradeStr.includes('初二') || gradeStr.includes('初三');
         case '高中':
             return gradeStr.includes('高中') || gradeStr.includes('高一') || 
                    gradeStr.includes('高二') || gradeStr.includes('高三') ||

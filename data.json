@@ -1,19 +1,771 @@
 [
   {
-    "id": "25071407y",
+    "id": "25071809x",
+    "parentName": "",
+    "grade": "三年级（国际学校）",
+    "gradeCategory": "小学",
+    "subject": "英语",
+    "score": "",
+    "studentGender": "",
+    "salary": "250 /时 500/次",
+    "teacherGender": "不限",
+    "requirements": "专职老师，熟悉国际学校的教材，有经验",
+    "frequency": "暑假每周五次",
+    "time": "暑假周一到周五晚任意两小时",
+    "address": "南山区三湘海尚",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer",
+      "evening",
+      "daily"
+    ]
+  },
+  {
+    "id": "25071808",
     "parentName": "",
     "grade": "初二",
+    "gradeCategory": "初中",
+    "subject": "语文",
+    "score": "",
+    "studentGender": "",
+    "salary": "220/时 440/次",
+    "teacherGender": "不限",
+    "requirements": "专职老师，经验丰富，性格温和",
+    "frequency": "暑假10次课",
+    "time": "暑假7、8月上课，每次课两小时",
+    "address": "南山区郁金香家园",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071807",
+    "parentName": "",
+    "grade": "四年级",
+    "gradeCategory": "小学",
+    "subject": "数学",
+    "score": "",
+    "studentGender": "男",
+    "salary": "100-120/时 200-240/次",
+    "teacherGender": "不限",
+    "requirements": "大学生，最好是数学专业",
+    "frequency": "暑假每周2次课",
+    "time": "7.20开始上课",
+    "address": "福田区燕南路98号",
+    "region": "福田区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest"
+    ]
+  },
+  {
+    "id": "25071806x",
+    "parentName": "",
+    "grade": "高二",
+    "gradeCategory": "高中",
+    "subject": "数学",
+    "score": "",
+    "studentGender": "女",
+    "salary": "160-180时 320-360/次",
+    "teacherGender": "不限",
+    "requirements": "大学生，引导孩子学数学",
+    "frequency": "暑假10次课",
+    "time": "暑假8月份下午上课",
+    "address": "宝安区新安地铁1号线新安A出口",
+    "region": "宝安区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071805",
+    "parentName": "",
+    "grade": "四年级",
+    "gradeCategory": "小学",
+    "subject": "英语",
+    "score": "0基础",
+    "studentGender": "",
+    "salary": "100-120/时 200-240/次；200/时 400/次",
+    "teacherGender": "女",
+    "requirements": "大学生或专职老师都可以",
+    "frequency": "暑假20次课",
+    "time": "暑假7、8月上课，每次课两小时",
+    "address": "宝安区宏发世纪城",
+    "region": "宝安区",
+    "teacherType": [
+      "大学生",
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071803y",
+    "parentName": "",
+    "grade": "初三",
+    "gradeCategory": "初中",
+    "subject": "全科辅导",
+    "score": "",
+    "studentGender": "女",
+    "salary": "130-150/时 260-300/次",
+    "teacherGender": "女",
+    "requirements": "准大一新生，刚高考完的",
+    "frequency": "暑假30次课",
+    "time": "暑假7、8月上课，每次课两小时",
+    "address": "龙岗区宇宏公元盛世",
+    "region": "龙岗区",
+    "teacherType": [],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071802",
+    "parentName": "",
+    "grade": "新高一",
+    "gradeCategory": "高中",
+    "subject": "数学物理",
+    "score": "",
+    "studentGender": "男",
+    "salary": "160/小时 320/次",
+    "teacherGender": "不限",
+    "requirements": "大学生，有经验",
+    "frequency": "暑假5次",
+    "time": "暑假8月15-20号上课，开学继续",
+    "address": "罗湖区太白路金威新苑",
+    "region": "罗湖区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071713",
+    "parentName": "",
+    "grade": "高二",
+    "gradeCategory": "高中",
+    "subject": "物理",
+    "score": "",
+    "studentGender": "男",
+    "salary": "300/时 600/次",
+    "teacherGender": "不限",
+    "requirements": "专职老师",
+    "frequency": "暑假每周一次",
+    "time": "暑假7、8月上课",
+    "address": "福田口岸附近（福田口岸站走路1分钟到）",
+    "region": "其他大亚湾区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071712x",
+    "parentName": "",
+    "grade": "初一",
+    "gradeCategory": "初中",
+    "subject": "奥数",
+    "score": "",
+    "studentGender": "男",
+    "salary": "250/时 500/次",
+    "teacherGender": "不限",
+    "requirements": "专职老师",
+    "frequency": "每周2-3次",
+    "time": "暑假7、8月上课，每次课两小时",
+    "address": "龙岗区环球物流中心",
+    "region": "龙岗区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071709x",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "物理",
+    "score": "70",
+    "studentGender": "男",
+    "salary": "800/2小时",
+    "teacherGender": "男",
+    "requirements": "专职老师，40岁左右，要有培优经验，投简历带上培优案例",
+    "frequency": "暑假10次",
+    "time": "暑假7月上课",
+    "address": "福田区皇庭世茂裕玺",
+    "region": "福田区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071708x",
+    "parentName": "",
+    "grade": "六年级",
+    "gradeCategory": "小学",
+    "subject": "语数英",
+    "score": "",
+    "studentGender": "男",
+    "salary": "150/时 300/次",
+    "teacherGender": "男",
+    "requirements": "大学生，哈工大，性格开朗",
+    "frequency": "暑假每周2-3次课",
+    "time": "暑假8月上课",
+    "address": "福田石厦地铁站附近",
+    "region": "其他大亚湾区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071706x",
+    "parentName": "",
+    "grade": "高二",
+    "gradeCategory": "高中",
+    "subject": "数学",
+    "score": "",
+    "studentGender": "女",
+    "salary": "300/时 600/次",
+    "teacherGender": "女",
+    "requirements": "专职老师",
+    "frequency": "暑假10次课左右",
+    "time": "暑假7.24-8.21号上课，每次课两小时",
+    "address": "中山市东凤镇海伦湾",
+    "region": "其他大亚湾区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071703x",
+    "parentName": "",
+    "grade": "四年级",
+    "gradeCategory": "小学",
+    "subject": "英语FCE",
+    "score": "基础好，pet优秀",
+    "studentGender": "",
+    "salary": "250/小时 500/次",
+    "teacherGender": "优先女",
+    "requirements": "专职老师",
+    "frequency": "暑假15次课",
+    "time": "暑假7月上课上到31号，每天两小时",
+    "address": "龙华区谭罗别墅",
+    "region": "龙华区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071702x",
+    "parentName": "",
+    "grade": "三年级",
+    "gradeCategory": "小学",
+    "subject": "英语",
+    "score": "",
+    "studentGender": "",
+    "salary": "300-350 /时 600-700/次",
+    "teacherGender": "不限",
+    "requirements": "外教老师，母语是英语",
+    "frequency": "暑假每周五次",
+    "time": "暑假周一到周五晚任意两小时",
+    "address": "南山区三湘海尚",
+    "region": "南山区",
+    "teacherType": [],
+    "category": [
+      "latest",
+      "high-price",
+      "summer",
+      "evening",
+      "daily"
+    ]
+  },
+  {
+    "id": "25071610",
+    "parentName": "",
+    "grade": "高二",
+    "gradeCategory": "高中",
+    "subject": "英语",
+    "score": "",
+    "studentGender": "男",
+    "salary": "160-180/时 320-360/次",
+    "teacherGender": "不限",
+    "requirements": "大学生",
+    "frequency": "暑假15次课",
+    "time": "暑假7月中旬开始上课（最好是上午），每次课两小时",
+    "address": "宝安区上星万科星城上郡",
+    "region": "宝安区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071604x",
+    "parentName": "",
+    "grade": "四年级",
+    "gradeCategory": "小学",
+    "subject": "数学",
+    "score": "有基础",
+    "studentGender": "",
+    "salary": "250/小时 500/次",
+    "teacherGender": "/",
+    "requirements": "专职老师，有辅导初联等竞赛的经验",
+    "frequency": "暑假20次课",
+    "time": "7.27-8.8下午、8.22-8.28白天任意两小时（晚上不考虑）",
+    "address": "南山区泛海拉菲花",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "evening"
+    ]
+  },
+  {
+    "id": "25071409",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "英语",
+    "score": "97",
+    "studentGender": "女（艺术生）",
+    "salary": "350/时 700/次",
+    "teacherGender": "最好女",
+    "requirements": "专职老师，经验丰富，能提分",
+    "frequency": "每周一次课",
+    "time": "8月开始，每周六上课",
+    "address": "宝安区西乡径贝新村",
+    "region": "宝安区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "weekend"
+    ]
+  },
+  {
+    "id": "25071211-b",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "英语",
+    "score": "",
+    "studentGender": "男",
+    "salary": "350/时 700/次",
+    "teacherGender": "男",
+    "requirements": "专职老师，有高三经验，经验丰富",
+    "frequency": "暑假10次课",
+    "time": "暑假7月20号开始上课，每次课两小时",
+    "address": "龙岗区理想家园",
+    "region": "龙岗区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071111x",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "英语",
+    "score": "120",
+    "studentGender": "男",
+    "salary": "450/小时 900/次",
+    "teacherGender": "不限",
+    "requirements": "专职老师，培优经验丰富，学历好，带培优案例截图发简历",
+    "frequency": "暑假15次课左右",
+    "time": "暑假7月13-30号上课，每次两小时",
+    "address": "南山区中海阳光玫瑰园",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25071004x",
+    "parentName": "",
+    "grade": "初一",
+    "gradeCategory": "初中",
+    "subject": "英语",
+    "score": "",
+    "studentGender": "女",
+    "salary": "250/时 500/次",
+    "teacherGender": "女",
+    "requirements": "在校老师",
+    "frequency": "协商",
+    "time": "暑假8月上课，每次课两小时",
+    "address": "罗湖区宝安南路天地大厦南门",
+    "region": "罗湖区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25070703x",
+    "parentName": "",
+    "grade": "初三",
+    "gradeCategory": "初中",
+    "subject": "数理化",
+    "score": "成绩很不错",
+    "studentGender": "男",
+    "salary": "150/时 300/次",
+    "teacherGender": "不限",
+    "requirements": "研究生，培养孩子学习习惯",
+    "frequency": "每周两次",
+    "time": "暑假7月28号开始上课，每次课两小时",
+    "address": "南山区深云村9B栋",
+    "region": "南山区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer"
+    ]
+  },
+  {
+    "id": "25070308",
+    "parentName": "",
+    "grade": "五年级",
+    "gradeCategory": "小学",
+    "subject": "语数英",
+    "score": "",
+    "studentGender": "",
+    "salary": "100-120/小时 200-240/次",
+    "teacherGender": "不限",
+    "requirements": "大学生，引导孩子学习",
+    "frequency": "待定",
+    "time": "暑假7、8月上午上课，每次课两小时",
+    "address": "龙岗区布澜路中城康桥花园二期",
+    "region": "龙岗区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25070301回",
+    "parentName": "",
+    "grade": "高一升高二",
+    "gradeCategory": "高中",
+    "subject": "数学",
+    "score": "",
+    "studentGender": "女",
+    "salary": "180/时 360/次",
+    "teacherGender": "不限",
+    "requirements": "大学生，高中在深圳八大或深圳大学以上",
+    "frequency": "暑假8次，8.25号开学后每周一次",
+    "time": "7.11-7.26（隔天上一次，下午上两小时），开学每周一次",
+    "address": "福田区福田口岸附近",
+    "region": "福田区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest"
+    ]
+  },
+  {
+    "id": "25070202",
+    "parentName": "",
+    "grade": "初三",
     "gradeCategory": "初中",
     "subject": "数学",
     "score": "",
     "studentGender": "男",
-    "salary": "220-250/时 440-500/次",
+    "salary": "250/时 500/次",
     "teacherGender": "不限",
     "requirements": "专职老师",
-    "frequency": "暑假10次课",
-    "time": "8.15号开始",
-    "address": "龙岗区南湾街道左庭右院北区三栋",
-    "region": "龙岗区",
+    "frequency": "暑假15次课",
+    "time": "暑假8月份上课",
+    "address": "福田区红岭地铁站附近",
+    "region": "福田区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25062807y-c",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "化学",
+    "score": "",
+    "studentGender": "男",
+    "salary": "专职老师350/时 700/次；在校老师400/时 800/次",
+    "teacherGender": "不限",
+    "requirements": "在校老师和优秀的专职老师都可以",
+    "frequency": "暑假3次课",
+    "time": "暑假7月中旬-7月24号上课，每次任意两小时，开学每周六上课",
+    "address": "深圳北站附近",
+    "region": "其他大亚湾区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer",
+      "weekend"
+    ]
+  },
+  {
+    "id": "25062807y-b",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "物理",
+    "score": "",
+    "studentGender": "男",
+    "salary": "专职老师350/时 700/次；在校老师400/时 800/次",
+    "teacherGender": "不限",
+    "requirements": "在校老师和优秀的专职老师都可以",
+    "frequency": "暑假3次课",
+    "time": "暑假7月中旬-7月24号上课，每次任意两小时，开学每周六上课",
+    "address": "深圳北站附近",
+    "region": "其他大亚湾区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer",
+      "weekend"
+    ]
+  },
+  {
+    "id": "25062807y-a",
+    "parentName": "",
+    "grade": "高三",
+    "gradeCategory": "高中",
+    "subject": "数学",
+    "score": "",
+    "studentGender": "男",
+    "salary": "专职老师350/时 700/次；在校老师400/时 800/次",
+    "teacherGender": "不限",
+    "requirements": "在校老师和优秀的专职老师都可以",
+    "frequency": "暑假3次课",
+    "time": "暑假7月中旬-7月24号上课，每次任意两小时，开学每周六上课",
+    "address": "深圳北站附近",
+    "region": "其他大亚湾区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "summer",
+      "weekend"
+    ]
+  },
+  {
+    "id": "25061902",
+    "parentName": "",
+    "grade": "初一",
+    "gradeCategory": "初中",
+    "subject": "陪读",
+    "score": "",
+    "studentGender": "",
+    "salary": "110-130/时 220-260/次",
+    "teacherGender": "女",
+    "requirements": "大学生，深大",
+    "frequency": "暑假前每周三次课，暑假每周五次课",
+    "time": "周中上午或下午任意两小时，暑假周一至周五",
+    "address": "南山区华侨城地铁站附近",
+    "region": "南山区",
+    "teacherType": [
+      "大学生"
+    ],
+    "category": [
+      "latest",
+      "summer",
+      "daily"
+    ]
+  },
+  {
+    "id": "25060906-a",
+    "parentName": "",
+    "grade": "初一",
+    "gradeCategory": "初中",
+    "subject": "语文",
+    "score": "中上",
+    "studentGender": "",
+    "salary": "220/小时 440/次",
+    "teacherGender": "不限",
+    "requirements": "专职老师，能引导孩子学习",
+    "frequency": "暑假15次课左右",
+    "time": "暑假7、8月份上课、最近都可以试课",
+    "address": "南山区荔湾地铁站附近",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25060303",
+    "parentName": "",
+    "grade": "高一",
+    "gradeCategory": "高中",
+    "subject": "AP物理",
+    "score": "无",
+    "studentGender": "男",
+    "salary": "450 / 小时 900 / 次",
+    "teacherGender": "无",
+    "requirements": "专职老师，有AP物理辅导经验",
+    "frequency": "一周一次",
+    "time": "周日上午9点至11点",
+    "address": "南山区海月地铁站",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "weekend"
+    ]
+  },
+  {
+    "id": "25051704回",
+    "parentName": "",
+    "grade": "四年级+三年级",
+    "gradeCategory": "小学",
+    "subject": "语文英语",
+    "score": "国际学校 中文差一点",
+    "studentGender": "哥哥妹妹",
+    "salary": "300/小时，老师适当报价，一次两小时",
+    "teacherGender": "女",
+    "requirements": "专职老师，#口语好（英文面试），有国际学校教学经验，或者有内陆教培经验或学校教学经验。",
+    "frequency": "每周五次",
+    "time": "周一到周五",
+    "address": "南山区深圳湾悦府1期",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "high-price",
+      "daily"
+    ]
+  },
+  {
+    "id": "25051401-c",
+    "parentName": "",
+    "grade": "高一",
+    "gradeCategory": "高中",
+    "subject": "AP心理学",
+    "score": "无",
+    "studentGender": "男",
+    "salary": "500/小时 1000/次",
+    "teacherGender": "无",
+    "requirements": "专职老师",
+    "frequency": "协商",
+    "time": "协商，暑假也需要",
+    "address": "南山区海月地铁站",
+    "region": "南山区",
+    "teacherType": [
+      "专职老师"
+    ],
+    "category": [
+      "latest",
+      "summer"
+    ]
+  },
+  {
+    "id": "25041310",
+    "parentName": "",
+    "grade": "高一",
+    "gradeCategory": "高中",
+    "subject": "alevel G1 经济",
+    "score": "无",
+    "studentGender": "男",
+    "salary": "450/小时，900/次",
+    "teacherGender": "男",
+    "requirements": "专职老师，需英语教学",
+    "frequency": "每周一次",
+    "time": "每周任意一天下午 4:30 之后两小时",
+    "address": "罗湖区东湖街道东湖豪庭",
+    "region": "罗湖区",
     "teacherType": [
       "专职老师"
     ],
@@ -21,8 +773,4 @@
       "latest"
     ]
   }
-<<<<<<< HEAD
 ]
-=======
-]
->>>>>>> 682d4e88b4b49038988790ccbe47b1bc892fc1ce

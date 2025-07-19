@@ -27,7 +27,7 @@
   {
     "id": "25071808",
     "parentName": "",
-    "grade": "初二",
+    "grade": "准初二",
     "gradeCategory": "初中",
     "subject": "语文",
     "score": "",
@@ -72,7 +72,7 @@
   {
     "id": "25071806x",
     "parentName": "",
-    "grade": "高二",
+    "grade": "准高二",
     "gradeCategory": "高中",
     "subject": "数学",
     "score": "",
@@ -95,7 +95,7 @@
   {
     "id": "25071805",
     "parentName": "",
-    "grade": "四年级",
+    "grade": "准四年级",
     "gradeCategory": "小学",
     "subject": "英语",
     "score": "0基础",
@@ -120,7 +120,7 @@
   {
     "id": "25071803y",
     "parentName": "",
-    "grade": "初三",
+    "grade": "准初三",
     "gradeCategory": "初中",
     "subject": "全科辅导",
     "score": "",
@@ -165,7 +165,7 @@
   {
     "id": "25071713",
     "parentName": "",
-    "grade": "高二",
+    "grade": "准高二",
     "gradeCategory": "高中",
     "subject": "物理",
     "score": "",
@@ -189,7 +189,7 @@
   {
     "id": "25071712x",
     "parentName": "",
-    "grade": "初一",
+    "grade": "准初一",
     "gradeCategory": "初中",
     "subject": "奥数",
     "score": "",
@@ -212,7 +212,7 @@
   {
     "id": "25071709x",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "物理",
     "score": "70",
@@ -235,7 +235,7 @@
   {
     "id": "25071708x",
     "parentName": "",
-    "grade": "六年级",
+    "grade": "准六年级",
     "gradeCategory": "小学",
     "subject": "语数英",
     "score": "",
@@ -259,7 +259,7 @@
   {
     "id": "25071706x",
     "parentName": "",
-    "grade": "高二",
+    "grade": "准高二",
     "gradeCategory": "高中",
     "subject": "数学",
     "score": "",
@@ -330,7 +330,7 @@
   {
     "id": "25071610",
     "parentName": "",
-    "grade": "高二",
+    "grade": "准高二",
     "gradeCategory": "高中",
     "subject": "英语",
     "score": "",
@@ -376,7 +376,7 @@
   {
     "id": "25071409",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "英语",
     "score": "97",
@@ -400,7 +400,7 @@
   {
     "id": "25071211-b",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "英语",
     "score": "",
@@ -424,7 +424,7 @@
   {
     "id": "25071111x",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "英语",
     "score": "120",
@@ -447,7 +447,7 @@
   {
     "id": "25071004x",
     "parentName": "",
-    "grade": "初一",
+    "grade": "准初一",
     "gradeCategory": "初中",
     "subject": "英语",
     "score": "",
@@ -470,7 +470,7 @@
   {
     "id": "25070703x",
     "parentName": "",
-    "grade": "初三",
+    "grade": "准初三",
     "gradeCategory": "初中",
     "subject": "数理化",
     "score": "成绩很不错",
@@ -539,7 +539,7 @@
   {
     "id": "25070202",
     "parentName": "",
-    "grade": "初三",
+    "grade": "准初三",
     "gradeCategory": "初中",
     "subject": "数学",
     "score": "",
@@ -562,7 +562,7 @@
   {
     "id": "25062807y-c",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "化学",
     "score": "",
@@ -587,7 +587,7 @@
   {
     "id": "25062807y-b",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "物理",
     "score": "",
@@ -612,7 +612,7 @@
   {
     "id": "25062807y-a",
     "parentName": "",
-    "grade": "高三",
+    "grade": "准高三",
     "gradeCategory": "高中",
     "subject": "数学",
     "score": "",

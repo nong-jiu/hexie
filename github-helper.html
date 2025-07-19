@@ -346,9 +346,6 @@ git push origin main
                         order.parentName = line.replace('家长称呼：', '').trim();
                     } else if (line.startsWith('孩子年级：')) {
                         let grade = line.replace('孩子年级：', '').trim();
-                        if (grade.startsWith('准')) {
-                            grade = grade.substring(1);
-                        }
                         order.grade = grade;
                         order.gradeCategory = autoClassifyGrade(grade);
                     } else if (line.startsWith('科目：')) {
@@ -409,8 +406,8 @@ git push origin main
         function autoClassifyGrade(grade) {
             if (/幼儿园|幼儿|大班|中班|小班/.test(grade)) return '幼儿';
             if (/一年级|二年级|三年级|四年级|五年级|六年级|小学|1年级|2年级|3年级|4年级|5年级|6年级/.test(grade)) return '小学';
-            if (/初中|初一|八年级|九年级|初二|初三|7年级|8年级|9年级/.test(grade)) return '初中';
-            if (/高中|高一|高二|高三|十年级/.test(grade)) return '高中';
+            if (/初中|初一|八年级|九年级|初二|初三|准初二|准初三|7年级|8年级|9年级/.test(grade)) return '初中';
+            if (/高中|高一|高二|高三|十年级|准高一|准高二|准高三/.test(grade)) return '高中';
             if (/大学生|成人|成年人/.test(grade)) return '成人';
             return ''; // 默认无分类
         }

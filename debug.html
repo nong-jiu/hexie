@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Grade Parsing</title>
+</head>
+<body>
+    <h1>年级解析调试</h1>
+    <div id="debug-result"></div>
+    
+    <script>
+        // 复制github-helper.html的解析逻辑
+        function autoClassifyGrade(grade) {
+            if (/幼儿园|幼儿|大班|中班|小班/.test(grade)) return '幼儿';
+            if (/一年级|二年级|三年级|四年级|五年级|六年级|小学|1年级|2年级|3年级|4年级|5年级|6年级/.test(grade)) return '小学';
+            if (/初中|初一|八年级|九年级|初二|初三|准初二|准初三|7年级|8年级|9年级/.test(grade)) return '初中';
+            if (/高中|高一|高二|高三|十年级|准高一|准高二|准高三/.test(grade)) return '高中';
+            if (/大学生|成人|成年人/.test(grade)) return '成人';
+            return ''; // 默认无分类
+        }
+
+        function parseOrderData(rawData) {
+            const orders = [];
+            const blocks = rawData.split(/\n\s*\n/).filter(block => block.trim());
+            
+            for (const block of blocks) {
+                const lines = block.split('\n').map(line => line.trim()).filter(line => line);
+                const order = {};
+                
+                for (const line of lines) {
+                    if (line.includes('【订单：') && line.includes('】')) {
+                        order.id = line.match(/【订单：(.+?)】/)?.[1] || '';
+                    } else if (line.startsWith('家长称呼：')) {
+                        order.parentName = line.replace('家长称呼：', '').trim();
+                    } else if (line.startsWith('孩子年级：')) {
+                        let grade = line.replace('孩子年级：', '').trim();
+                        console.log('原始年级值:', grade);
+                        order.grade = grade;
+                        order.gradeCategory = autoClassifyGrade(grade);
+                        console.log('解析后grade:', order.grade);
+                        console.log('解析后gradeCategory:', order.gradeCategory);
+                    } else if (line.startsWith('科目：')) {
+                        order.subject = line.replace('科目：', '').trim();
+                    } else if (line.startsWith('成绩：')) {
+                        order.score = line.replace('成绩：', '').trim();
+                    } else if (line.startsWith('孩子性别：')) {
+                        order.studentGender = line.replace('孩子性别：', '').trim();
+                    } else if (line.startsWith('课酬：')) {
+                        order.salary = line.replace('课酬：', '').trim();
+                    } else if (line.startsWith('老师性别：')) {
+                        order.teacherGender = line.replace('老师性别：', '').trim();
+                    } else if (line.startsWith('对老师的要求：')) {
+                        order.requirements = line.replace('对老师的要求：', '').trim();
+                    } else if (line.startsWith('次数：')) {
+                        order.frequency = line.replace('次数：', '').trim();
+                    } else if (line.startsWith('辅导时间：')) {
+                        order.time = line.replace('辅导时间：', '').trim();
+                    } else if (line.startsWith('上门地址：')) {
+                        order.address = line.replace('上门地址：', '').trim();
+                    }
+                }
+                
+                if (order.id) {
+                    orders.push(order);
+                }
+            }
+            
+            return orders;
+        }
+
+        // 测试数据
+        const testData = `【订单：25071808】
+家长称呼：
+孩子年级：准初二
+科目：语文
+成绩：
+孩子性别：
+课酬：220/时 440/次
+老师性别：不限
+对老师的要求：专职老师，经验丰富，性格温和
+次数：暑假10次课
+辅导时间：暑假7、8月上课，每次课两小时
+上门地址：南山区郁金香家园`;
+
+        const result = parseOrderData(testData);
+        
+        document.getElementById('debug-result').innerHTML = 
+            '<h2>调试结果：</h2>' +
+            '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+    </script>
+</body>
+</html>

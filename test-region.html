@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>区域解析测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .pass { background-color: #d4edda; }
+        .fail { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>区域解析测试</h1>
+    <div id="test-results"></div>
+
+    <script>
+        // 复制区域标准化函数
+        function normalizeRegion(address) {
+            if (!address) return '其他大亚湾区';
+            
+            const addressStr = address.toLowerCase();
+            
+            // 定义区域映射
+            const regionMappings = {
+                '福田区': ['福田', '福田区'],
+                '罗湖区': ['罗湖', '罗湖区'],
+                '盐田区': ['盐田', '盐田区'],
+                '南山区': ['南山', '南山区'],
+                '宝安区': ['宝安', '宝安区'],
+                '龙岗区': ['龙岗', '龙岗区'],
+                '龙华区': ['龙华', '龙华区'],
+                '坪山区': ['坪山', '坪山区'],
+                '光明区': ['光明', '光明区'],
+                '大鹏新区': ['大鹏', '大鹏新区', '大鹏新区']
+            };
+            
+            // 检查是否包含任一区域关键词
+            for (const [standardRegion, keywords] of Object.entries(regionMappings)) {
+                for (const keyword of keywords) {
+                    if (addressStr.includes(keyword.toLowerCase())) {
+                        return standardRegion;
+                    }
+                }
+            }
+            
+            // 如果没有匹配到任何区域，返回"其他大亚湾区"
+            return '其他大亚湾区';
+        }
+
+        // 测试用例
+        const testCases = [
+            { address: "宝安区xxx宏发世纪城", expected: "宝安区" },
+            { address: "宝安新安地铁1号线", expected: "宝安区" },
+            { address: "福田区燕南路98号", expected: "福田区" },
+            { address: "福田口岸附近", expected: "福田区" },
+            { address: "南山区三湘海尚", expected: "南山区" },
+            { address: "南山地铁站附近", expected: "南山区" },
+            { address: "龙岗区宇宏公元盛世", expected: "龙岗区" },
+            { address: "龙岗布吉大芬地铁站", expected: "龙岗区" },
+            { address: "罗湖区宝安南路", expected: "罗湖区" },
+            { address: "罗湖太白路金威新苑", expected: "罗湖区" },
+            { address: "龙华区谭罗别墅", expected: "龙华区" },
+            { address: "龙华地铁站附近", expected: "龙华区" },
+            { address: "光明区xxx小区", expected: "光明区" },
+            { address: "坪山xxx花园", expected: "坪山区" },
+            { address: "盐田xxx大厦", expected: "盐田区" },
+            { address: "大鹏新区xxx村", expected: "大鹏新区" },
+            { address: "深圳北站附近", expected: "其他大亚湾区" },
+            { address: "中山市东凤镇", expected: "其他大亚湾区" },
+            { address: "", expected: "其他大亚湾区" }
+        ];
+
+        // 运行测试
+        const resultsDiv = document.getElementById('test-results');
+        let passed = 0;
+        let total = testCases.length;
+
+        testCases.forEach((testCase, index) => {
+            const result = normalizeRegion(testCase.address);
+            const isPass = result === testCase.expected;
+            
+            if (isPass) passed++;
+            
+            const testDiv = document.createElement('div');
+            testDiv.className = `test-case ${isPass ? 'pass' : 'fail'}`;
+            testDiv.innerHTML = `
+                <strong>测试 ${index + 1}:</strong> ${testCase.address || '(空地址)'}<br>
+                <strong>期望:</strong> ${testCase.expected}<br>
+                <strong>实际:</strong> ${result}<br>
+                <strong>结果:</strong> ${isPass ? '通过' : '失败'}
+            `;
+            resultsDiv.appendChild(testDiv);
+        });
+
+        // 显示总结
+        const summaryDiv = document.createElement('div');
+        summaryDiv.innerHTML = `
+            <h2>测试结果</h2>
+            <p>总共测试: ${total} 个用例</p>
+            <p>通过: ${passed} 个</p>
+            <p>失败: ${total - passed} 个</p>
+            <p>通过率: ${Math.round(passed/total*100)}%</p>
+        `;
+        resultsDiv.insertBefore(summaryDiv, resultsDiv.firstChild);
+    </script>
+</body>
+</html>

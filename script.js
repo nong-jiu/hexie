@@ -8,6 +8,10 @@ async function loadOrderData() {
         const response = await fetch('./data.json?' + Date.now());
         if (response.ok) {
             orderData = await response.json();
+            // 标准化区域字段
+            orderData = processOrderRegions(orderData);
+            // 自动标记高价单
+            orderData = processHighPriceOrders(orderData);
             // 保存到localStorage作为备份
             localStorage.setItem('tutorOrders', JSON.stringify(orderData));
             localStorage.setItem('dataUpdateTime', new Date().toISOString());
@@ -23,15 +27,109 @@ async function loadOrderData() {
             try {
                 orderData = JSON.parse(savedData);
                 console.log('使用本地备份数据');
+                // 处理高价单标记
+                orderData = processHighPriceOrders(orderData);
             } catch (parseError) {
                 console.error('解析本地数据失败:', parseError);
                 orderData = getDefaultData();
+                orderData = processHighPriceOrders(orderData);
             }
         } else {
             orderData = getDefaultData();
+            orderData = processHighPriceOrders(orderData);
         }
     }
     return orderData;
+}
+
+// 处理订单区域标准化
+function processOrderRegions(orders) {
+    return orders.map(order => {
+        // 如果已经有标准区域字段，则使用它，否则从地址解析
+        if (order.region && isStandardRegion(order.region)) {
+            return order;
+        }
+        
+        // 从地址解析区域
+        const normalizedRegion = normalizeRegion(order.address);
+        return {
+            ...order,
+            region: normalizedRegion
+        };
+    });
+}
+
+// 解析课酬并判断是否为高价单
+function processHighPriceOrders(orders) {
+    return orders.map(order => {
+        const isHighPrice = isHighPriceOrder(order.salary);
+        
+        // 更新category数组
+        let newCategories = [...order.category];
+        
+        if (isHighPrice && !newCategories.includes('high-price')) {
+            newCategories.push('high-price');
+        } else if (!isHighPrice && newCategories.includes('high-price')) {
+            newCategories = newCategories.filter(cat => cat !== 'high-price');
+        }
+        
+        return {
+            ...order,
+            category: newCategories
+        };
+    });
+}
+
+// 判断是否为高价单（单次课酬≥500元）
+function isHighPriceOrder(salary) {
+    if (!salary) return false;
+    
+    const salaryStr = salary.toString();
+    
+    // 匹配单次课酬的数字
+    // 支持格式：500/次、500-600/次、500~600/次、500/2小时等
+    const patterns = [
+        /(\d+(?:\d+|\.\d+)?)\s*[\/／]\s*(?:次|课时|课|次课)/g,  // 500/次
+        /(\d+(?:\d+|\.\d+)?)\s*-\s*(\d+(?:\d+|\.\d+)?)\s*[\/／]\s*(?:次|课时|课|次课)/g,  // 500-600/次
+        /(\d+(?:\d+|\.\d+)?)\s*~\s*(\d+(?:\d+|\.\d+)?)\s*[\/／]\s*(?:次|课时|课|次课)/g  // 500~600/次
+    ];
+    
+    for (const pattern of patterns) {
+        let match;
+        while ((match = pattern.exec(salaryStr)) !== null) {
+            let amount = 0;
+            
+            if (match.length === 2) {
+                // 单一价格 500/次
+                amount = parseFloat(match[1]);
+            } else if (match.length === 3) {
+                // 价格区间 500-600/次，取最低值
+                amount = parseFloat(match[1]);
+            }
+            
+            if (amount >= 500) {
+                return true;
+            }
+        }
+    }
+    
+    // 如果没有找到/次的格式，尝试直接提取数字
+    const numbers = salaryStr.match(/\d+(?:\.\d+)?/g);
+    if (numbers) {
+        const amounts = numbers.map(n => parseFloat(n));
+        return amounts.some(amount => amount >= 500);
+    }
+    
+    return false;
+}
+
+// 检查是否是标准区域名称
+function isStandardRegion(region) {
+    const standardRegions = [
+        '福田区', '罗湖区', '盐田区', '南山区', '宝安区', 
+        '龙岗区', '龙华区', '坪山区', '光明区', '大鹏新区', '其他大亚湾区'
+    ];
+    return standardRegions.includes(region);
 }
 
 // 手动检查数据更新
@@ -227,7 +325,7 @@ function displayDataUpdateTime() {
             updateTimeSpan.textContent = `数据已更新（${Math.floor(diffHours / 24)}天前）`;
         }
     } else {
-        updateTimeSpan.textContent = '首次加载数据';
+        updateTimeSpan.textContent = '';
     }
 }
 
@@ -236,6 +334,22 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 加载数据
     await loadOrderData();
     filteredData = orderData;
+    
+    // 打印区域分布统计
+    const regionStats = {};
+    orderData.forEach(order => {
+        regionStats[order.region] = (regionStats[order.region] || 0) + 1;
+    });
+    console.log('区域分布统计:', regionStats);
+    
+    // 打印高价单统计
+    const highPriceStats = orderData.filter(order => order.category.includes('high-price'));
+    console.log('高价单数量:', highPriceStats.length);
+    console.log('高价单详情:', highPriceStats.map(order => ({
+        id: order.id,
+        salary: order.salary,
+        subject: order.subject
+    })));
     
     // 渲染页面
     renderOrders(orderData);
@@ -440,12 +554,6 @@ function getOrderTags(order) {
     if (order.category.includes('summer')) {
         tags += '<span class="order-tag summer">暑假单</span>';
     }
-    if (order.category.includes('weekend')) {
-        tags += '<span class="order-tag weekend">周末</span>';
-    }
-    if (order.category.includes('evening')) {
-        tags += '<span class="order-tag evening">晚上</span>';
-    }
     if (order.category.includes('daily')) {
         tags += '<span class="order-tag daily">日常</span>';
     }
@@ -480,6 +588,39 @@ function matchGradeCategory(grade, targetCategory) {
         default:
             return false;
     }
+}
+
+// 地址区域标准化函数
+function normalizeRegion(address) {
+    if (!address) return '其他大亚湾区';
+    
+    const addressStr = address.toLowerCase();
+    
+    // 定义区域映射
+    const regionMappings = {
+        '福田': ['福田', '福田区'],
+        '罗湖区': ['罗湖', '罗湖区'],
+        '盐田区': ['盐田', '盐田区'],
+        '南山区': ['南山', '南山区'],
+        '宝安区': ['宝安', '宝安区'],
+        '龙岗区': ['龙岗', '龙岗区'],
+        '龙华区': ['龙华', '龙华区'],
+        '坪山区': ['坪山', '坪山区'],
+        '光明区': ['光明', '光明区'],
+        '大鹏新区': ['大鹏', '大鹏新区', '大鹏新区']
+    };
+    
+    // 检查是否包含任一区域关键词
+    for (const [standardRegion, keywords] of Object.entries(regionMappings)) {
+        for (const keyword of keywords) {
+            if (addressStr.includes(keyword.toLowerCase())) {
+                return standardRegion;
+            }
+        }
+    }
+    
+    // 如果没有匹配到任何区域，返回"其他大亚湾区"
+    return '其他大亚湾区';
 }
 
 // 筛选订单
@@ -622,6 +763,60 @@ function showCopySuccess(message) {
     setTimeout(() => {
         if (toast.parentNode) {
             toast.parentNode.removeChild(toast);
+        }
+    }, 2000);
+}
+
+// 重置所有筛选条件
+function resetAllFilters() {
+    // 重置下拉选择框
+    regionFilter.value = '';
+    gradeFilter.value = '';
+    teacherTypeFilter.value = '';
+    
+    // 重置搜索框
+    orderSearch.value = '';
+    
+    // 重置分类标签（选择"全部"）
+    tabBtns.forEach(btn => btn.classList.remove('active'));
+    const allBtn = document.querySelector('[data-category="all"]');
+    if (allBtn) {
+        allBtn.classList.add('active');
+    }
+    
+    // 重置当前分类
+    currentCategory = 'all';
+    
+    // 重置筛选数据并重新渲染
+    filteredData = orderData;
+    filterOrders();
+    
+    // 显示重置成功提示
+    showResetSuccess();
+}
+
+// 显示重置成功提示
+function showResetSuccess() {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        z-index: 10000;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = '✅ 筛选条件已重置';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
         }
     }, 2000);
 }

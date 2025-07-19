@@ -51,24 +51,20 @@
             </select>
 
             <input type="text" id="orderSearch" class="filter-input" placeholder="按订单号/地址/要求等关键词搜索...">
-            <button id="updateDataBtn" class="update-btn" onclick="checkForDataUpdate()" title="手动更新数据">🔄 更新数据</button>
         </div>
 
         <!-- 分类标签 -->
         <div class="category-tabs">
             <button class="tab-btn active" data-category="all">全部</button>
-            <button class="tab-btn" data-category="latest">最新单</button>
             <button class="tab-btn" data-category="summer">暑假单</button>
             <button class="tab-btn" data-category="high-price">高价单</button>
             <button class="tab-btn" data-category="urgent">加急单</button>
-            <button class="tab-btn" data-category="weekend">周末单</button>
-            <button class="tab-btn" data-category="evening">晚班单</button>
         </div>
 
         <!-- 数据更新时间 -->
         <div class="data-info">
             <span id="dataUpdateTime">数据加载中...</span>
-            <button id="updateDataBtn" class="update-btn" onclick="checkForDataUpdate()" title="手动更新数据">🔄 更新数据</button>
+            <button id="resetFiltersBtn2" class="update-btn" onclick="resetAllFilters()" title="重置所有筛选条件">🔄 重置筛选</button>
         </div>
 
         <!-- 订单列表 -->

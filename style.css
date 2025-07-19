@@ -51,27 +51,57 @@ body {
     background: white;
     padding: 15px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    align-items: end;
 }
 
-.filter-select, .search-input, .update-btn {
+.filter-select, .filter-input, .search-input, .update-btn {
     padding: 10px 12px;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 14px;
     background: white;
     outline: none;
+    transition: all 0.3s ease;
 }
 
-.filter-select:focus, .search-input:focus {
+.filter-select:focus, .filter-input:focus, .search-input:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
 }
 
-.search-input {
+.filter-input {
     grid-column: 1 / -1;
+    width: 100%;
+    font-family: inherit;
+    color: #333;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>');
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    padding-left: 40px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .filter-bar {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-select, .filter-input, .update-btn {
+        width: 100%;
+    }
+}
+
+.filter-input::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+.filter-input:focus::placeholder {
+    color: #667eea;
+    opacity: 0.7;
 }
 
 .update-btn {
